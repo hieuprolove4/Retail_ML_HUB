@@ -1,0 +1,54 @@
+# ============================================================
+# .gitignore — Dự án Retail ML Hub (Dự báo nhu cầu & Tối ưu tồn kho)
+# ============================================================
+
+# ---------- Môi trường ảo & Python ----------
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ---------- Jupyter ----------
+.ipynb_checkpoints/
+
+# ---------- Log ----------
+*.log
+logs/
+
+# ---------- Mô hình đã huấn luyện (nhị phân, nặng ~22 MB) ----------
+# Chỉ giữ lại metadata mô tả kết quả huấn luyện; các file .pkl tái tạo được
+# bằng cách chạy: python main_train_and_evaluate.py
+saved_models/*.pkl
+
+# ---------- Dữ liệu gốc (6 MB) ----------
+# Dataset không kèm trong repo để giữ repo nhẹ; xem README để biết cách đặt lại
+Dataset/
+
+# ---------- Báo cáo & biểu đồ sinh ra khi chạy pipeline (20 MB) ----------
+reports/
+
+# ---------- Gói nén / tài liệu văn phòng ----------
+*.zip
+*.rar
+*.7z
+*.docx
+*.doc
+*.pdf
+
+# ---------- IDE / OS ----------
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---------- Secret & thông tin nhạy cảm (không bao giờ commit) ----------
+.env
+.env.*
+*.pem
+*.key
+*.crt
+*credential*.json
+*service*account*.json

@@ -1,0 +1,73 @@
+{
+    "best_model": "Random Forest",
+    "metrics": {
+        "Model": "Random Forest",
+        "RMSE": 92.42,
+        "MAE": 73.71,
+        "MAPE (%)": 173.29
+    },
+    "store_id": "S001",
+    "product_id": "P0001",
+    "features": [
+        "Inventory Level",
+        "Price",
+        "Discount",
+        "Holiday/Promotion",
+        "Competitor Pricing",
+        "dayofweek",
+        "day",
+        "month",
+        "quarter",
+        "is_weekend",
+        "lag_1",
+        "lag_2",
+        "lag_7",
+        "lag_14",
+        "lag_21",
+        "lag_30",
+        "rolling_mean_7",
+        "rolling_std_7",
+        "rolling_mean_14",
+        "rolling_std_14",
+        "price_ratio",
+        "effective_price",
+        "Weather Condition_Rainy",
+        "Weather Condition_Snowy",
+        "Weather Condition_Sunny",
+        "Seasonality_Spring",
+        "Seasonality_Summer",
+        "Seasonality_Winter"
+    ],
+    "all_results": [
+        {
+            "Model": "ARIMA",
+            "RMSE": 107.07,
+            "MAE": 90.04,
+            "MAPE (%)": 221.29
+        },
+        {
+            "Model": "Exponential Smoothing",
+            "RMSE": 108.21,
+            "MAE": 90.23,
+            "MAPE (%)": 219.37
+        },
+        {
+            "Model": "SARIMA",
+            "RMSE": 107.03,
+            "MAE": 90.03,
+            "MAPE (%)": 221.23
+        },
+        {
+            "Model": "Random Forest",
+            "RMSE": 92.42,
+            "MAE": 73.71,
+            "MAPE (%)": 173.29
+        },
+        {
+            "Model": "XGBoost",
+            "RMSE": 95.73,
+            "MAE": 76.24,
+            "MAPE (%)": 181.99
+        }
+    ]
+}
