@@ -69,5 +69,223 @@
             "MAE": 76.24,
             "MAPE (%)": 181.99
         }
-    ]
+    ],
+    "extra_diagnostics": {
+        "sku": "S001-P0001",
+        "train_n": 560,
+        "test_n": 141,
+        "baselines": {
+            "Naive": {
+                "last_train_value": 145.0,
+                "RMSE": 107.52,
+                "MAE": 91.48,
+                "MAPE (%)": 231.07
+            },
+            "Seasonal Naive": {
+                "last_7_train_values": [
+                    14.0,
+                    335.0,
+                    455.0,
+                    176.0,
+                    90.0,
+                    46.0,
+                    145.0
+                ],
+                "RMSE": 197.64,
+                "MAE": 154.55,
+                "MAPE (%)": 344.0
+            }
+        },
+        "ablation_no_inventory": {
+            "Random Forest (27 feats)": {
+                "RMSE": 113.19,
+                "MAE": 93.75,
+                "MAPE (%)": 229.77,
+                "top5_features": {
+                    "lag_2": 0.0761,
+                    "rolling_std_14": 0.0735,
+                    "price_ratio": 0.0716,
+                    "rolling_std_7": 0.0654,
+                    "lag_7": 0.0625
+                }
+            },
+            "XGBoost (27 feats)": {
+                "RMSE": 114.29,
+                "MAE": 92.47,
+                "MAPE (%)": 216.71
+            }
+        },
+        "pure_multistep_141": {
+            "Random Forest (Pure 141-step)": {
+                "RMSE": 119.09,
+                "MAE": 104.91,
+                "MAPE (%)": 304.03
+            },
+            "XGBoost (Pure 141-step)": {
+                "RMSE": 116.85,
+                "MAE": 101.89,
+                "MAPE (%)": 291.11
+            }
+        },
+        "ljung_box": {
+            "ARIMA": {
+                "lag_7": {
+                    "lb_stat": 3.0244,
+                    "lb_pvalue": 0.8827
+                },
+                "lag_14": {
+                    "lb_stat": 7.6845,
+                    "lb_pvalue": 0.9051
+                }
+            },
+            "SARIMA": {
+                "lag_7": {
+                    "lb_stat": 3.0344,
+                    "lb_pvalue": 0.8818
+                },
+                "lag_14": {
+                    "lb_stat": 7.3405,
+                    "lb_pvalue": 0.9208
+                }
+            }
+        },
+        "diebold_mariano": [
+            {
+                "pair": "Random Forest vs SARIMA",
+                "model_1": "Random Forest",
+                "model_2": "SARIMA",
+                "dm_mse": -3.2353,
+                "p_mse": 0.001516,
+                "dm_mae": -3.4806,
+                "p_mae": 0.000667
+            },
+            {
+                "pair": "Random Forest vs ARIMA",
+                "model_1": "Random Forest",
+                "model_2": "ARIMA",
+                "dm_mse": -3.2454,
+                "p_mse": 0.001467,
+                "dm_mae": -3.4845,
+                "p_mae": 0.000659
+            },
+            {
+                "pair": "Random Forest vs Naive",
+                "model_1": "Random Forest",
+                "model_2": "Naive",
+                "dm_mse": -3.4752,
+                "p_mse": 0.00068,
+                "dm_mae": -3.8087,
+                "p_mae": 0.000208
+            },
+            {
+                "pair": "Random Forest vs Seasonal Naive",
+                "model_1": "Random Forest",
+                "model_2": "Seasonal Naive",
+                "dm_mse": -7.2046,
+                "p_mse": 0.0,
+                "dm_mae": -7.4264,
+                "p_mae": 0.0
+            },
+            {
+                "pair": "Random Forest vs XGBoost",
+                "model_1": "Random Forest",
+                "model_2": "XGBoost",
+                "dm_mse": -1.7823,
+                "p_mse": 0.076865,
+                "dm_mae": -1.5102,
+                "p_mae": 0.133235
+            },
+            {
+                "pair": "Random Forest vs RF (no Inv)",
+                "model_1": "Random Forest",
+                "model_2": "RF (no Inv)",
+                "dm_mse": -4.0293,
+                "p_mse": 9.1e-05,
+                "dm_mae": -3.7872,
+                "p_mae": 0.000225
+            },
+            {
+                "pair": "RF (no Inv) vs SARIMA",
+                "model_1": "RF (no Inv)",
+                "model_2": "SARIMA",
+                "dm_mse": 2.9858,
+                "p_mse": 0.00334,
+                "dm_mae": 1.8294,
+                "p_mae": 0.069471
+            },
+            {
+                "pair": "RF (Pure 141-step) vs SARIMA",
+                "model_1": "RF (Pure 141-step)",
+                "model_2": "SARIMA",
+                "dm_mse": 3.4204,
+                "p_mse": 0.00082,
+                "dm_mae": 4.3189,
+                "p_mae": 3e-05
+            },
+            {
+                "pair": "XGBoost vs SARIMA",
+                "model_1": "XGBoost",
+                "model_2": "SARIMA",
+                "dm_mse": -2.2994,
+                "p_mse": 0.022964,
+                "dm_mae": -2.9709,
+                "p_mae": 0.003496
+            },
+            {
+                "pair": "ARIMA vs SARIMA",
+                "model_1": "ARIMA",
+                "model_2": "SARIMA",
+                "dm_mse": 0.4736,
+                "p_mse": 0.636509,
+                "dm_mae": 0.0934,
+                "p_mae": 0.925709
+            }
+        ],
+        "inventory_reconciliation": {
+            "rf_test_141_mean": 131.5,
+            "hinh_4_11_static": {
+                "Store ID": "S001",
+                "Product ID": "P0001",
+                "Category": "Groceries",
+                "Forecast Daily Demand (D_hat)": 131.5,
+                "Demand Std Dev (sigma_D)": 109.15,
+                "Lead Time (Days)": 3,
+                "Service Level": "95%",
+                "Z Score": 1.65,
+                "Safety Stock (SS)": 312,
+                "Reorder Point (ROP)": 707,
+                "Reorder Point Unrounded": 706.44,
+                "Current Inventory": 223,
+                "Status": "🔴 NGUY CẤP (CẦN ĐẶT HÀNG NGAY)",
+                "Status Code": "CRITICAL",
+                "Suggested Order Qty": 837,
+                "Suggested Order Qty (Rounded ROP)": 838
+            },
+            "web_90d_average": {
+                "Store ID": "S001",
+                "Product ID": "P0001",
+                "Category": "Groceries",
+                "Forecast Daily Demand (D_hat)": 136.5,
+                "Demand Std Dev (sigma_D)": 109.15,
+                "Lead Time (Days)": 3,
+                "Service Level": "95%",
+                "Z Score": 1.645,
+                "Safety Stock (SS)": 311,
+                "Reorder Point (ROP)": 721,
+                "Reorder Point Unrounded": 720.47,
+                "Current Inventory": 223,
+                "Status": "🔴 NGUY CẤP (CẦN ĐẶT HÀNG NGAY)",
+                "Status Code": "CRITICAL",
+                "Suggested Order Qty": 858,
+                "Suggested Order Qty (Rounded ROP)": 859
+            },
+            "abc_xyz_cv_summary": {
+                "min": 0.758,
+                "median": 0.807,
+                "max": 0.834,
+                "count_le_0_80": 7,
+                "count_gt_0_80": 13
+            }
+        }
+    }
 }

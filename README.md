@@ -97,27 +97,33 @@ Backend mount thư mục `frontend/` tại `/static` và cache dữ liệu trong
 
 ---
 
-## 3. Năm mô hình và kết quả đánh giá thật
+## 3. Các mô hình, đối chứng bổ sung và kết quả đánh giá
 
-Chỉ số dưới đây **đọc trực tiếp** từ `saved_models/model_metadata.json` (huấn luyện trên SKU `S001` – `P0001`, chia Train 80% / Test 20% theo thời gian). Định nghĩa chỉ số nằm ở `src/forecasting_models.py:33-46` (RMSE, MAE, MAPE %).
+Chỉ số dưới đây **đọc trực tiếp** từ `saved_models/model_metadata.json` và `reports/extra_diagnostics_s001_p0001.json` (SKU `S001–P0001`, Train 560 ngày / Test 141 ngày theo thời gian). Định nghĩa chỉ số nằm ở `src/forecasting_models.py:33-46`.
 
-| Mô hình | RMSE | MAE | MAPE (%) | Nguồn |
-|---------|-----:|----:|---------:|-------|
-| ARIMA | 107.07 | 90.04 | 221.29 | `saved_models/model_metadata.json:43-47` |
-| Exponential Smoothing (Holt-Winters) | 108.21 | 90.23 | 219.37 | `saved_models/model_metadata.json:48-53` |
-| SARIMA | 107.03 | 90.03 | 221.23 | `saved_models/model_metadata.json:54-59` |
-| **Random Forest** | **92.42** | **73.71** | **173.29** | `saved_models/model_metadata.json:60-65` |
-| XGBoost | 95.73 | 76.24 | 181.99 | `saved_models/model_metadata.json:66-71` |
+| Mô hình / Thí nghiệm | Giao thức | RMSE | MAE | MAPE (%) |
+|---|---|---|---|---|
+| **Random Forest (28 biến)** | 1 bước (`Inventory Level` đã biết) | **92,42** | **73,71** | 173,29 |
+| XGBoost (28 biến) | 1 bước (`Inventory Level` đã biết) | 95,73 | 76,24 | 181,99 |
+| SARIMA `(1,1,1)(1,0,1)7` | Đa bước 141 ngày | 107,03 | 90,03 | 221,23 |
+| ARIMA `(2,1,1)` | Đa bước 141 ngày | 107,07 | 90,04 | 221,29 |
+| Naive (`y_last = 145`) | Đa bước 141 ngày (cơ sở) | 107,52 | 91,48 | 231,07 |
+| Exponential Smoothing | Đa bước 141 ngày | 108,21 | 90,23 | 219,37 |
+| RF (27 biến, **bỏ Inventory Level**) | 1 bước (ablation) | 113,19 | 93,75 | 229,77 |
+| XGBoost (27 biến, **bỏ Inventory Level**) | 1 bước (ablation) | 114,29 | 92,47 | 216,71 |
+| XGBoost (Đệ quy thuần 141 bước) | Đa bước 141 ngày (cùng chuẩn Web) | 116,85 | 101,89 | 291,11 |
+| Random Forest (Đệ quy thuần 141 bước) | Đa bước 141 ngày (cùng chuẩn Web) | 119,09 | 104,91 | 304,03 |
+| Seasonal Naive (`s = 7`) | Đa bước 141 ngày (cơ sở) | 197,64 | 154,55 | 344,00 |
 
-**Mô hình tốt nhất: `Random Forest`** (RMSE 92.42 — thấp nhất), khai báo tại `saved_models/model_metadata.json:2`, chỉ số tại `saved_models/model_metadata.json:3-8`.
+Ghi chú kỹ thuật & kiểm định (`src/extra_diagnostics.py`):
 
-Ghi chú kỹ thuật:
-
-- Mô hình tốt nhất được chọn theo **RMSE thấp nhất** (`main_train_and_evaluate.py`, bước 5).
-- Cấu hình tham số: ARIMA `(2, 1, 1)`; SARIMA `(1, 1, 1)(1, 0, 1, 7)`; Holt-Winters chu kỳ mùa `7`.
-- Random Forest và XGBoost dùng 28 đặc trưng (`saved_models/model_metadata.json:11-40`): biến lịch (`dayofweek`, `day`, `month`, `quarter`, `is_weekend`), lag (`lag_1`, `lag_2`, `lag_7`, `lag_14`, `lag_21`, `lag_30`), rolling (`rolling_mean_7`, `rolling_std_7`, `rolling_mean_14`, `rolling_std_14`), biến giá (`price_ratio`, `effective_price`) và biến one-hot cho thời tiết/mùa vụ.
-- Thông số tồn kho mặc định (`src/config.py`): lead time 3 ngày, service level 95% (Z = 1.65), Train/Test = 80/20.
-- Công thức tồn kho (`src/inventory_optimizer.py:37-100`): `Safety Stock = Z × σ_D × √L` và `Reorder Point = D̂ × L + SS`.
+- **Ljung-Box** trên phần dư huấn luyện: ARIMA `Q(7)=3,02 (p=0,8827)`, SARIMA `Q(7)=3,03 (p=0,8818)` ($\alpha = 0,05$: không bác bỏ giả thuyết không về tính độc lập của phần dư).
+- **Diebold-Mariano (hiệu chỉnh Harvey)**:
+  - `RF (28 biến, 1 bước)` vs `RF (27 biến, bỏ Inv)`: `DM = -4,03` ($p < 0,0001$) — khẳng định mô hình phụ thuộc mạnh vào `Inventory Level` (chiếm `42,33%` tầm quan trọng).
+  - `RF (27 biến)` vs `SARIMA`: `DM = +2,99` ($p = 0,0033$) — bỏ tồn kho làm RF thua SARIMA có ý nghĩa.
+  - `RF (Đệ quy thuần 141 bước)` vs `SARIMA`: `DM = +3,42` ($p = 0,0008$) — ở bài toán đa bước thuần, mô hình đơn biến ít tham số ổn định hơn.
+  - `RF (1 bước)` vs `XGBoost (1 bước)`: `DM = -1,78` ($p = 0,0769$) và `ARIMA` vs `SARIMA`: `DM = 0,47` ($p = 0,6365$) — không có ý nghĩa thống kê ở mức 5%.
+- **Thông số tồn kho (`src/inventory_optimizer.py`)**: Lead time $L = 3$ ngày, Service Level $95\%$ ($Z = 1,645$), mục tiêu đặt bù $S = 1,5 \times \text{ROP}$ (quy tắc $(s,S)$). Với $\hat{D} = 155,1$ (dự báo 3 ngày đệ quy RF trên Web): `SS = 311`, `ROP = 777` (`776,27` chưa làm tròn), nên `Q = ⌈1,5 × 777 − 223⌉ = 943` (hoặc `942` theo `ROP` chưa làm tròn `776,27`). Nguồn tham chiếu 90 ngày trên Web (`D = 136,50`) cho `ROP = 721`; biểu đồ tĩnh `Hình 4.11` (`main_train_and_evaluate.py`, `D_test = 131,50`, `Z = 1,65`) cho `SS = 312, ROP = 707`.
 
 ---
 
@@ -136,6 +142,7 @@ ML_Project/
 │   ├── time_series_diagnostics.py # Kiểm định ADF/KPSS, ACF/PACF, rolling, phân rã mùa vụ
 │   ├── forecasting_models.py    # 5 mô hình dự báo + hàm tính RMSE/MAE/MAPE + vẽ biểu đồ
 │   ├── forecast_service.py      # Dịch vụ dự báo có cache cho API (đánh giá & dự báo tương lai)
+│   ├── extra_diagnostics.py     # Baselines Naive/SNaive, ablation bỏ Inventory Level, đệ quy 141 bước, Ljung-Box & DM
 │   └── inventory_optimizer.py   # Safety Stock, ROP, ABC-XYZ, mô phỏng tồn kho
 ├── backend/
 │   └── api.py                   # FastAPI: REST API + phục vụ frontend tĩnh
@@ -204,17 +211,14 @@ Repo được cố ý giữ nhẹ, các thành phần sau bị `.gitignore` (kh�
 
 ## 7. Hạn chế đã biết
 
-Đây là các điểm yếu thật của đồ án, ghi lại để người đọc đánh giá đúng — **không tô hồng kết quả**:
+Đây là các giới hạn phương pháp luận được trình bày thẳng thắn trong báo cáo Word (Mục 4.3.5 & Chương 6):
 
-1. **MAPE rất cao (173% – 221% ở cả 5 mô hình)** — đọc từ `saved_models/model_metadata.json:43-71`. Nguyên nhân khả dĩ:
-   - MAPE chia cho nhu cầu thực tế từng ngày, mà nhu cầu của một SKU đơn lẻ biến động mạnh và có những ngày giá trị rất nhỏ, khiến tỷ lệ sai số bị khuếch đại; chỉ cần vài ngày nhu cầu thấp là MAPE trung bình vọt lên hàng trăm phần trăm.
-   - Hàm tính MAPE trong `src/forecasting_models.py:39-40` đã **loại các mẫu có nhu cầu thực tế bằng 0** (`non_zero_mask = y_true != 0`) để tránh chia cho 0, nhưng điều này chỉ xử lý đúng mẫu bằng 0 tuyệt đối — các mẫu nhu cầu rất nhỏ (khác 0) vẫn làm mẫu số nhỏ và MAPE phình to.
-   - Nói ngắn gọn: **MAPE không phù hợp với chuỗi nhu cầu nhỏ, nhiều nhiễu**. Với đồ án này nên dùng **RMSE / MAE**, và nếu muốn dùng chỉ số phần trăm thì nên dùng **WAPE** (tổng sai số tuyệt đối / tổng nhu cầu thực tế) — ổn định hơn nhiều so với MAPE.
-2. **Hai mô hình họ cây không vượt trội rõ rệt** so với các mô hình thống kê: RMSE tốt nhất là 92.42 (Random Forest) so với ~107 của nhóm ARIMA/SARIMA (chênh lệch không lớn so với độ biến động của chuỗi). Với dữ liệu nhiều nhiễu, chênh lệch này chưa đủ để kết luận chắc chắn.
-3. **Chỉ đánh giá trên 1 SKU (S001 – P0001)**: kết quả trong `model_metadata.json` không đại diện cho toàn bộ 5 cửa hàng × 20 sản phẩm. Khi xem SKU khác, backend sẽ huấn luyện lại tại thời điểm gọi API (`src/forecast_service.py`), nên chỉ số có thể khác.
-4. **Dự báo nhiều bước của mô hình học máy là dự báo đệ quy** (recursive multi-step): dùng dự báo của bước trước làm `lag` cho bước sau, nên sai số tích lũy dần theo horizon — càng dự báo xa (14, 30 ngày) càng kém tin cậy.
-5. **Giả định của công thức tồn kho khá đơn giản**: `SS = Z × σ_D × √L` giả định nhu cầu phân phối chuẩn và lead time cố định (3 ngày). Thực tế lead time biến động sẽ làm SS/ROP bị đánh giá thấp.
-6. **Bộ dữ liệu nhiều khả năng là dữ liệu mô phỏng** (các cột như `Demand Forecast`, `Units Ordered` không được dùng làm đặc trưng), nên kết luận không nên suy rộng sang dữ liệu bán lẻ thật.
+1. **Lệch giao thức đánh giá giữa ML (1 bước) và Thống kê (141 bước)**: trong `src/data_loader.py`, `lag_1..lag_30` và biến `rolling` trên 141 ngày kiểm thử của Random Forest/XGBoost được tính từ `Units Sold` thực tế (one-step-ahead), còn ARIMA/SARIMA/Holt-Winters/Naive dự báo liên tục 141 bước không biết trung gian. Khi kiểm thử bằng **dự báo đệ quy thuần 141 bước** (cơ chế tạo $\hat{D} = 155,1$ cho tồn kho), Random Forest có `RMSE = 119,09` (kém `SARIMA 107,03`, `DM = +3,42`, `p = 0,0008`).
+2. **Phụ thuộc mạnh vào biến `Inventory Level` (42,33% tầm quan trọng)**: cột tồn kho được ghi nhận đầu ngày (trước khi bán), nhưng trong bộ dữ liệu mô phỏng Kaggle sản lượng bán bị chặn trên bởi tồn kho. Khi bỏ cột này (27 biến), `RF RMSE` tăng lên `113,19` (`DM = -4,03`, `p < 0,0001`).
+3. **MAPE rất cao (173% – 344%)**: do có nhiều ngày nhu cầu gần bằng 0 ở mẫu số; kết luận chính dựa vào **RMSE / MAE** (tương lai nên bổ sung `WAPE` hoặc `sMAPE`).
+4. **Chỉ đánh giá sâu 1 SKU (`S001–P0001`) trên 1 lần chia `560/141` ngày**: chưa áp dụng `rolling-origin backtesting` trên toàn bộ `100` cặp `Store × SKU`.
+5. **Ma trận ABC–XYZ suy biến và chưa mô phỏng tồn kho đóng vòng**: dưới ngưỡng cố định `CV > 0,70`, toàn bộ `20` SKU tại `S001` (`CV` `0,758–0,834`) dồn hết vào cột `Z`; chính sách `SS`/`ROP`/`1,5 × ROP` mới dừng ở công thức tĩnh, chưa đo lường chi phí lưu kho hay tỷ lệ thiếu hàng thực tế qua thời gian.
+6. **Bộ dữ liệu mô phỏng công khai (Kaggle — `Retail Store Inventory Forecasting Dataset`)**: cột `Inventory Level` sinh trong đoạn `[50, 500]` (1 ngày) nên nằm thấp hơn ngưỡng `ROP` (`707–777`) thiết kế cho Lead Time $L = 3$ ngày.
 
 ---
 

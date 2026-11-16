@@ -367,20 +367,20 @@ def build_sheet_pccv(wb):
     ])
 
     members = [
-        (1, "Khang", "Nhóm trưởng (Team Lead) & Kiến trúc Dữ liệu", "Chương 1 (Dữ liệu & EDA) & Điều phối chung",
-         "Thu thập & kiểm tra dữ liệu retail_store_inventory.csv (73.100 dòng); chuẩn hóa Bảng 1.2 (15 thuộc tính); xây dựng 7 biểu đồ EDA (Hình 1.1–1.7); lập kế hoạch Gantt (20/10–15/11/2026) & rà soát toàn bộ báo cáo Word.",
+        (1, "Phùng Trịnh Trường Khang (K244060721)", "Nhóm trưởng (Team Lead) & Kiến trúc Dữ liệu", "Chương 1 (Dữ liệu & EDA) & Điều phối chung",
+         "Thu thập & kiểm tra dữ liệu retail_store_inventory.csv (73.100 dòng mô phỏng Kaggle); chuẩn hóa Bảng 1.2 (15 thuộc tính); xây dựng 7 biểu đồ EDA (Hình 1.1–1.7); lập kế hoạch Gantt (20/10–15/11/2026) & rà soát toàn bộ báo cáo Word.",
          0.20, 1.00, "Hoàn thành 100%"),
-        (2, "Hiếu", "Trưởng nhóm Học máy (ML Lead) & Backend FastAPI", "Chương 4 (ML) & Backend RESTful API",
-         "Thiết kế pipeline kỹ thuật 28 đặc trưng (Bảng 4.2); chạy kiểm định dừng ADF & KPSS (Bảng 4.1, Mục 4.1.2); huấn luyện & lưu 5 mô hình ARIMA, SARIMA, Holt-Winters, Random Forest, XGBoost (.pkl); xây dựng FastAPI backend (backend/api.py, forecast_service.py).",
+        (2, "Huỳnh Mai Hiếu (K244060716)", "Trưởng nhóm Học máy (ML Lead) & Backend FastAPI", "Chương 4 (ML) & Backend RESTful API",
+         "Thiết kế pipeline kỹ thuật 28 đặc trưng (Bảng 4.2); chạy kiểm định dừng ADF & KPSS (Bảng 4.1); huấn luyện & lưu 5 mô hình (.pkl); chạy đối chứng mở rộng (Naive, bỏ Inventory Level, đệ quy 141 bước, Ljung-Box, Diebold-Mariano — extra_diagnostics.py) & Backend FastAPI.",
          0.20, 1.00, "Hoàn thành 100%"),
-        (3, "Minh", "Chuyên viên Phương pháp & Tối ưu Chuỗi cung ứng", "Chương 2 (Phương pháp) & Tối ưu Tồn kho",
-         "Soạn cơ sở lý thuyết 5 mô hình, thước đo RMSE/MAE/MAPE & lý thuyết tồn kho (Mục 2.2–2.4); cài đặt công thức tính Tồn kho an toàn (SS = 311), Điểm đặt hàng lại (ROP = 777), đề xuất đặt hàng và Ma trận ABC–XYZ (inventory_optimizer.py).",
+        (3, "Phùng Anh Minh (K244060726)", "Chuyên viên Phương pháp & Tối ưu Chuỗi cung ứng", "Chương 2 (Phương pháp) & Tối ưu Tồn kho",
+         "Soạn cơ sở lý thuyết 5 mô hình, thước đo RMSE/MAE/MAPE & lý thuyết tồn kho (Mục 2.2–2.4); cài đặt công thức tính Safety Stock (SS = 311), ROP (777), Q (943 theo ROP làm tròn / 942 theo ROP thực) và Ma trận ABC–XYZ (inventory_optimizer.py).",
          0.20, 1.00, "Hoàn thành 100%"),
-        (4, "Ân", "Chuyên viên Nghiên cứu Tài liệu & Tổng hợp Báo cáo", "Chương 3 (Literature Review) & Chương 6",
-         "Tổng hợp tài liệu nghiên cứu khoa học trong & ngoài nước về dự báo nhu cầu bán lẻ và quản trị tồn kho (Chương 3); viết Chương 6 (Kết luận thực nghiệm, Ý nghĩa, Hướng phát triển & Kiến nghị), chuẩn hóa 14 Tài liệu tham khảo.",
+        (4, "Nguyễn Huỳnh Thiên Ân (K244060703)", "Chuyên viên Nghiên cứu Tài liệu & Tổng hợp Báo cáo", "Chương 3 (Literature Review) & Chương 6",
+         "Tổng hợp tài liệu nghiên cứu khoa học trong & ngoài nước (Chương 3); viết Chương 6 & Bảng 6.1 trung thực theo kết quả kiểm chứng thực nghiệm; chuẩn hóa 15 tài liệu tham khảo chuẩn APA 7th.",
          0.20, 1.00, "Hoàn thành 100%"),
-        (5, "Lợi", "Kỹ sư Giao diện Web Studio & Mô hình hóa BPMN", "Chương 5 (Web Studio) & Bộ Flowchart BPMN",
-         "Phát triển giao diện Web Dashboard 6 màn hình (frontend/index.html, app.js, styles) tích hợp ApexCharts offline; thiết kế bộ sơ đồ Flowchart/BPMN (.drawio + PNG 300 DPI: Sơ đồ 1.1, 4.1, 5.1–5.3); chụp ảnh & thuyết minh 6 màn hình (Hình 5.1–5.12).",
+        (5, "Cai Đặng Phúc Lợi (K244060723)", "Kỹ sư Giao diện Web Studio & Mô hình hóa BPMN", "Chương 5 (Web Studio) & Bộ Flowchart BPMN",
+         "Phát triển giao diện Web Dashboard 6 màn hình (frontend/index.html, js/pages/*) tích hợp ApexCharts offline; thiết kế bộ sơ đồ Flowchart/BPMN (.drawio + PNG 300 DPI: Sơ đồ 1.1, 4.1, 5.1–5.3); chụp ảnh & thuyết minh 6 màn hình (Hình 5.1–5.12).",
          0.20, 1.00, "Hoàn thành 100%"),
     ]
 
@@ -856,23 +856,23 @@ def build_sheet_contribution(wb):
 
     # Khối 1 (A1:E8): Bảng Contribution Evaluation chuẩn mẫu (Tiếng Anh)
     ce_en_rows = [
-        ("Khang", "ID1",
-         "Wrote Chapter 1 in report (data collection, Table 1.2 & 7 EDA charts), created project Gantt chart (Oct 20 – Nov 15, 2026), assisted in frontend UI review, report editing, and helped with demo.",
+        ("Phùng Trịnh Trường Khang", "K244060721",
+         "Wrote Chapter 1 in report (Kaggle simulated data collection, Table 1.2 & 7 EDA charts), created project Gantt chart (Oct 20 – Nov 15, 2026), assisted in frontend UI review, report editing, and helped with demo.",
          "Positive, cooperative, and always willing to support the team in data analysis, report editing, and demonstration tasks.",
          0.20),
-        ("Hiếu", "ID2",
-         "Wrote Chapter 4 in report (28 engineered features, ADF/KPSS stationarity tests, trained 5 ML/TS models: ARIMA, SARIMA, Holt-Winters, Random Forest, XGBoost), and built FastAPI backend.",
-         "Active, supportive, and showed strong responsibility in machine learning modeling, backend API development, and report writing.",
+        ("Huỳnh Mai Hiếu", "K244060716",
+         "Wrote Chapter 4 in report (28 engineered features, ADF/KPSS, 5 models, Naive/Seasonal Naive baselines, No-Inventory ablation, 141-step recursive test, Ljung-Box & Diebold-Mariano diagnostics), and built FastAPI backend.",
+         "Active, supportive, and showed strong responsibility in machine learning modeling, rigorous statistical diagnostics, backend API development, and report writing.",
          0.20),
-        ("Minh", "ID3",
-         "Wrote Chapter 2 in report (theoretical methodology, accuracy metrics & inventory theory), implemented Safety Stock (SS=311), Reorder Point (ROP=777), ABC-XYZ matrix, and What-If logic.",
+        ("Phùng Anh Minh", "K244060726",
+         "Wrote Chapter 2 in report (theoretical methodology, accuracy metrics & inventory theory), implemented Safety Stock (SS=311), Reorder Point (ROP=777), Suggested Order (Q=943/942), ABC-XYZ matrix, and What-If logic.",
          "Responsible, supportive, and completed assigned work well while actively contributing to inventory optimization and slide presentation.",
          0.20),
-        ("Ân", "ID4",
-         "Wrote Chapter 3 (Literature Review) and Chapter 6 (Conclusion, significance, future directions & recommendations), standardized 14 IEEE references, and contributed to slide preparation.",
+        ("Nguyễn Huỳnh Thiên Ân", "K244060703",
+         "Wrote Chapter 3 (Literature Review) and Chapter 6 (evidence-grounded conclusions, Table 6.1 & limitations), standardized 15 APA 7th references, and contributed to slide preparation.",
          "Worked responsibly, maintained good teamwork, and completed assigned tasks with care and consistency.",
          0.20),
-        ("Lợi", "ID5",
+        ("Cai Đặng Phúc Lợi", "K244060723",
          "Developed Chapter 5 Web Studio frontend (6 interactive screens with offline ApexCharts), created and drew 5 flowchart diagrams with embedded icons (.drawio & 300 DPI PNG) for Chapters 1, 4, and 5.",
          "Hardworking, collaborative, and contributed effectively to frontend UI development, flowchart/BPMN system diagrams, and integration tasks.",
          0.20),
@@ -887,7 +887,7 @@ def build_sheet_contribution(wb):
         total_row_data=(
             "Total",
             "5 Members",
-            "Completed all 6 report chapters, 5 trained models (.pkl), 5 BPMN flowcharts (.drawio/.png), and Web Studio app.",
+            "Completed all 6 report chapters (APA 7th), 5 trained models (.pkl), extra statistical diagnostics, 5 BPMN flowcharts (.drawio/.png), and Web Studio app.",
             "100% team consensus and equal commitment across all project deliverables.",
             "=SUM(E3:E7)",
         ),
@@ -897,23 +897,23 @@ def build_sheet_contribution(wb):
 
     # Khối 2 (A10:E17): Bản Tiếng Việt cùng cấu trúc & màu sắc chuẩn mẫu
     ce_vi_rows = [
-        ("Khang", "ID1",
-         "Viết Chương 1 (thu thập 73.100 dòng dữ liệu, Bảng 1.1–1.3 & 7 biểu đồ EDA), lập biểu đồ Gantt tiến độ (20/10–15/11/2026), hỗ trợ rà soát giao diện Web UI, biên tập báo cáo Word và trình bày demo.",
+        ("Phùng Trịnh Trường Khang", "K244060721",
+         "Viết Chương 1 (thu thập 73.100 dòng dữ liệu mô phỏng Kaggle, Bảng 1.1–1.3 & 7 biểu đồ EDA), lập biểu đồ Gantt tiến độ (20/10–15/11/2026), hỗ trợ rà soát giao diện Web UI, biên tập báo cáo Word và trình bày demo.",
          "Tích cực, hợp tác tốt, luôn sẵn sàng hỗ trợ các thành viên trong khâu xử lý dữ liệu, hoàn thiện báo cáo và thuyết trình.",
          0.20),
-        ("Hiếu", "ID2",
-         "Viết Chương 4 (kiểm định ADF/KPSS, 28 biến đặc trưng, huấn luyện 5 mô hình ARIMA, SARIMA, Holt-Winters, Random Forest, XGBoost) và xây dựng hệ thống Backend FastAPI.",
-         "Chủ động, nhiệt tình hỗ trợ đồng đội và thể hiện tinh thần trách nhiệm cao trong lập trình học máy, API và viết báo cáo.",
+        ("Huỳnh Mai Hiếu", "K244060716",
+         "Viết Chương 4 (kiểm định ADF/KPSS, 28 biến đặc trưng, huấn luyện 5 mô hình, bổ sung Naive/Seasonal Naive, đối chứng bỏ Inventory Level, đệ quy 141 bước, Ljung-Box & Diebold-Mariano) và xây dựng hệ thống Backend FastAPI.",
+         "Chủ động, nhiệt tình hỗ trợ đồng đội và thể hiện tinh thần trách nhiệm cao trong lập trình học máy, kiểm định thống kê, API và viết báo cáo.",
          0.20),
-        ("Minh", "ID3",
-         "Viết Chương 2 (cơ sở lý thuyết, chỉ số đánh giá & tối ưu tồn kho Mục 2.2–2.4), cài đặt công thức Tồn kho an toàn (SS=311), Điểm đặt hàng lại (ROP=777), ma trận ABC–XYZ và mô phỏng What-If.",
+        ("Phùng Anh Minh", "K244060726",
+         "Viết Chương 2 (cơ sở lý thuyết, chỉ số đánh giá & tối ưu tồn kho Mục 2.2–2.4), cài đặt công thức Safety Stock (SS=311), Reorder Point (ROP=777), lượng đặt Q=943/942, ma trận ABC–XYZ và mô phỏng What-If.",
          "Có trách nhiệm, phối hợp nhịp nhàng, hoàn thành tốt phần việc được giao và đóng góp tích cực vào tối ưu tồn kho & slide.",
          0.20),
-        ("Ân", "ID4",
-         "Viết Chương 3 (Tổng quan nghiên cứu khoa học) và Chương 6 (Kết luận, Ý nghĩa, Hướng phát triển & Kiến nghị), chuẩn hóa 14 tài liệu tham khảo và hỗ trợ chuẩn bị slide.",
+        ("Nguyễn Huỳnh Thiên Ân", "K244060703",
+         "Viết Chương 3 (Tổng quan nghiên cứu khoa học) và Chương 6 (Kết luận, Bảng 6.1 trung thực theo kết quả đo & Hướng phát triển), chuẩn hóa 15 tài liệu tham khảo APA 7th và hỗ trợ chuẩn bị slide.",
          "Làm việc nghiêm túc, giữ tinh thần đồng đội tốt, hoàn thành các hạng mục được phân công cẩn thận và nhất quán.",
          0.20),
-        ("Lợi", "ID5",
+        ("Cai Đặng Phúc Lợi", "K244060723",
          "Phát triển giao diện Web Studio Chương 5 (6 màn hình Hình 5.1–5.12 với ApexCharts offline), thiết kế bộ sơ đồ Flowchart/BPMN kèm icon (.drawio & PNG 300 DPI) cho Chương 1, 4 và 5.",
          "Chăm chỉ, phối hợp chặt chẽ, đóng góp hiệu quả cho giao diện Frontend Web, sơ đồ hệ thống Flowchart/BPMN và tích hợp toàn hệ thống.",
          0.20),
@@ -1033,16 +1033,16 @@ def build_sheet_models(wb):
     ])
 
     model_extra = {
-        "Random Forest": ("Học máy (Ensemble Tree)", "n_estimators=100, max_depth=12, random_state=42",
-                          "TỐI ƯU NHẤT (#1) — RMSE thấp nhất 92,42; vượt trội hơn rõ rệt nhóm thống kê cổ điển nhờ 28 biến đặc trưng."),
-        "XGBoost": ("Học máy (Gradient Boosting)", "n_estimators=150, lr=0.05, max_depth=6, subsample=0.8",
-                    "Hạng #2 — Bám sát Random Forest (RMSE 95,73), phản ánh tốt các nhịp tăng giảm ngắn hạn."),
-        "SARIMA": ("Thống kê Chuỗi thời gian", "order=(1, 1, 1), seasonal_order=(1, 0, 1, 7)",
-                   "Tốt nhất trong nhóm Thống kê cổ điển nhờ nắm bắt chu kỳ lặp 7 ngày trong tuần."),
-        "ARIMA": ("Thống kê Chuỗi thời gian", "order=(2, 1, 1)",
-                  "Mô hình tham chiếu cổ điển đơn biến (Benchmark cơ sở để tính % cải thiện)."),
-        "Exponential Smoothing": ("Thống kê Làm mượt hàm mũ", "Holt-Winters (trend='add', seasonal='add', period=7)",
-                                  "Thích ứng mượt nhưng khó bám các biến động đột biến theo ngày của bán lẻ."),
+        "Random Forest": ("Học máy (1 bước, 28 biến)", "n_estimators=100, max_depth=12, random_state=42",
+                          "Hạng #1 (1 bước) — RMSE 92,42 khi có Inventory Level; bỏ Inv tăng lên 113,19 và đệ quy 141 bước đạt 119,09."),
+        "XGBoost": ("Học máy (1 bước, 28 biến)", "n_estimators=150, lr=0.05, max_depth=6, subsample=0.8",
+                    "Hạng #2 (1 bước) — RMSE 95,73 (p=0,0769 vs RF); bỏ Inv đạt 114,29 và đệ quy 141 bước đạt 116,85."),
+        "SARIMA": ("Thống kê (141 bước)", "order=(1, 1, 1), seasonal_order=(1, 0, 1, 7)",
+                   "Hạng #1 trong nhóm đa bước 141 ngày (RMSE 107,03); Ljung-Box Q(7)=3,03 (p=0,8818)."),
+        "ARIMA": ("Thống kê (141 bước)", "order=(2, 1, 1)",
+                  "Hạng #2 nhóm đa bước (RMSE 107,07); DM vs SARIMA p=0,6365 (không khác biệt có ý nghĩa)."),
+        "Exponential Smoothing": ("Thống kê (141 bước)", "Holt-Winters (trend='add', seasonal='add', period=7)",
+                                  "Holt-Winters giữ nhịp chu kỳ tuần nhưng sai số cao hơn SARIMA/Naive (RMSE 108,21)."),
     }
 
     sorted_models = sorted(meta["all_results"], key=lambda x: x["RMSE"])
@@ -1199,9 +1199,128 @@ def build_sheet_models(wb):
         height=24,
     )
 
-    # Phần 4: Biểu đồ Cột Excel原生 (Native BarChart) + Nhúng ảnh 300 DPI bên dưới bảng
-    chart_sec_r = fi_sum_r + 2
-    style_section_title(ws, chart_sec_r, 1, 9, "4. TRỰC QUAN HÓA SO SÁNH 5 MÔ HÌNH (BIỂU ĐỒ EXCEL TƯƠNG TÁC & ẢNH BÁO CÁO 300 DPI)")
+    # Phần 4: Đọc & hiển thị Đối chứng Mở rộng (Naive, Bỏ Inventory Level, Đệ quy 141 bước, Ljung-Box & Diebold-Mariano)
+    diag_path = os.path.join(REPORTS_DIR, "extra_diagnostics_s001_p0001.json")
+    cur_r = fi_sum_r + 2
+    if os.path.exists(diag_path):
+        with open(diag_path, encoding="utf-8") as df_json:
+            diag = json.load(df_json)
+
+        style_section_title(
+            ws, cur_r, 1, 9,
+            "4. ĐỐI CHỨNG MỞ RỘNG (NAIVE, BỎ INVENTORY LEVEL, ĐỆ QUY 141 BƯỚC), LJUNG-BOX & DIEBOLD-MARIANO (BẢNG 4.5–4.6 WORD)"
+        )
+        write_table_header(ws, cur_r + 1, [
+            "Nhóm", "Mô hình / Thí nghiệm đối chứng", "Giao thức", "Cấu hình / Ghi chú",
+            "RMSE", "MAE", "MAPE (%)", "% vs SARIMA (107,03)", "Ý nghĩa kiểm định / Giải thích"
+        ])
+        sarima_rmse = next(float(x["RMSE"]) for x in sorted_models if x["Model"] == "SARIMA")
+        ext_rows = [
+            ("Cơ sở (141 bước)", "Naive (Dự báo phẳng)", "Đa bước 141 ngày",
+             f"y_hat = y_train_last ({diag['baselines']['Naive']['last_train_value']:.0f})",
+             diag["baselines"]["Naive"]["RMSE"], diag["baselines"]["Naive"]["MAE"], diag["baselines"]["Naive"]["MAPE (%)"],
+             "Sai số xấp xỉ ARIMA/SARIMA vì chuỗi dừng quanh ~140 đơn vị."),
+            ("Cơ sở (141 bước)", "Seasonal Naive (s=7)", "Đa bước 141 ngày",
+             "Lặp 7 ngày cuối tập train",
+             diag["baselines"]["Seasonal Naive"]["RMSE"], diag["baselines"]["Seasonal Naive"]["MAE"], diag["baselines"]["Seasonal Naive"]["MAPE (%)"],
+             "Bị nhiễu do 2 đỉnh đột biến 335 & 455 lặp lại suốt 141 ngày."),
+            ("ML Ablation", "Random Forest (27 biến, bỏ Inv Level)", "1 bước (ablation)",
+             "Loại bỏ Inventory Level (còn 27 biến)",
+             diag["ablation_no_inventory"]["Random Forest (27 feats)"]["RMSE"],
+             diag["ablation_no_inventory"]["Random Forest (27 feats)"]["MAE"],
+             diag["ablation_no_inventory"]["Random Forest (27 feats)"]["MAPE (%)"],
+             "RMSE tăng +20,77 so với bản 28 biến; DM vs SARIMA p = 0,0033 (thua SARIMA)."),
+            ("ML Ablation", "XGBoost (27 biến, bỏ Inv Level)", "1 bước (ablation)",
+             "Loại bỏ Inventory Level (còn 27 biến)",
+             diag["ablation_no_inventory"]["XGBoost (27 feats)"]["RMSE"],
+             diag["ablation_no_inventory"]["XGBoost (27 feats)"]["MAE"],
+             diag["ablation_no_inventory"]["XGBoost (27 feats)"]["MAPE (%)"],
+             "Xác nhận cả 2 mô hình cây đều phụ thuộc lớn vào tồn kho đầu ngày."),
+            ("ML Đệ quy", "XGBoost (Đệ quy thuần 141 bước)", "Đa bước 141 ngày",
+             "Không dùng ngoại sinh test (từ 13/08/2023)",
+             diag["pure_multistep_141"]["XGBoost (Pure 141-step)"]["RMSE"],
+             diag["pure_multistep_141"]["XGBoost (Pure 141-step)"]["MAE"],
+             diag["pure_multistep_141"]["XGBoost (Pure 141-step)"]["MAPE (%)"],
+             "Sai số tích lũy khi dự báo dài hạn không biết trước tồn kho/khuyến mãi."),
+            ("ML Đệ quy", "Random Forest (Đệ quy thuần 141 bước)", "Đa bước 141 ngày",
+             "Cùng cơ chế sinh D_hat=155,1 trên Web",
+             diag["pure_multistep_141"]["Random Forest (Pure 141-step)"]["RMSE"],
+             diag["pure_multistep_141"]["Random Forest (Pure 141-step)"]["MAE"],
+             diag["pure_multistep_141"]["Random Forest (Pure 141-step)"]["MAPE (%)"],
+             "DM vs SARIMA = +3,42 (p = 0,0008): mô hình đơn biến ổn định hơn ở đa bước thuần."),
+        ]
+        for idx, (grp, name, proto, cfg, rmse, mae, mape, note) in enumerate(ext_rows):
+            r = cur_r + 2 + idx
+            ws.cell(r, 1, grp)
+            ws.cell(r, 2, name)
+            ws.cell(r, 3, proto)
+            ws.cell(r, 4, cfg)
+            ws.cell(r, 5, float(rmse))
+            ws.cell(r, 6, float(mae))
+            ws.cell(r, 7, float(mape) / 100.0)
+            ws.cell(r, 8, (sarima_rmse - float(rmse)) / sarima_rmse)
+            ws.cell(r, 9, note)
+            apply_row_style(
+                ws, r, 1, 9,
+                alignments=[AL_LEFT, AL_LEFT, AL_CENTER, AL_LEFT, AL_RIGHT, AL_RIGHT, AL_RIGHT, AL_RIGHT, AL_LEFT],
+                num_formats={4: "#,##0.00", 5: "#,##0.00", 6: "0.00%", 7: "+0.00%;-0.00%;0.00%"},
+                fill=FILL_ZEBRA if idx % 2 == 1 else FILL_WHITE,
+                bold_cols=[1],
+                height=26,
+            )
+
+        # Bảng Diebold-Mariano & Ljung-Box ngay bên dưới
+        dm_hdr_r = cur_r + 2 + len(ext_rows) + 1
+        write_table_header(ws, dm_hdr_r, [
+            "Kiểm định", "Cặp mô hình / Chuỗi phần dư", "DM (MSE) / Q(7)", "p-value (MSE / lag 7)",
+            "DM (MAE) / Q(14)", "p-value (MAE / lag 14)", "Mức α=0,05", "Khác biệt giao thức", "Diễn giải thống kê"
+        ])
+        diag_rows = [
+            ("Ljung-Box", "Phần dư ARIMA(2,1,1) (tập train)",
+             diag["ljung_box"]["ARIMA"]["lag_7"]["lb_stat"], diag["ljung_box"]["ARIMA"]["lag_7"]["lb_pvalue"],
+             diag["ljung_box"]["ARIMA"]["lag_14"]["lb_stat"], diag["ljung_box"]["ARIMA"]["lag_14"]["lb_pvalue"],
+             "Không bác bỏ H0", "Đồng nhất (1 chuỗi)", "Không đủ bằng chứng bác bỏ tính độc lập phần dư ở lag 7 & 14."),
+            ("Ljung-Box", "Phần dư SARIMA(1,1,1)(1,0,1,7) (train)",
+             diag["ljung_box"]["SARIMA"]["lag_7"]["lb_stat"], diag["ljung_box"]["SARIMA"]["lag_7"]["lb_pvalue"],
+             diag["ljung_box"]["SARIMA"]["lag_14"]["lb_stat"], diag["ljung_box"]["SARIMA"]["lag_14"]["lb_pvalue"],
+             "Không bác bỏ H0", "Đồng nhất (1 chuỗi)", "Không đủ bằng chứng bác bỏ tính độc lập phần dư ở lag 7 & 14."),
+        ]
+        for dm in diag["diebold_mariano"]:
+            pair = dm["pair"]
+            same_proto = pair in ("Random Forest vs XGBoost", "Random Forest vs RF (no Inv)", "ARIMA vs SARIMA", "RF (Pure 141-step) vs SARIMA")
+            sig = "Có (p < 0,05)" if dm["p_mse"] < 0.05 else "Không (p >= 0,05)"
+            interp = (
+                "Khác biệt có ý nghĩa trên cùng giao thức 1 bước" if pair == "Random Forest vs RF (no Inv)" else
+                ("Cùng giao thức 141 bước: SARIMA tốt hơn có ý nghĩa" if pair == "RF (Pure 141-step) vs SARIMA" else
+                 ("Cùng giao thức: không khác biệt ở mức 5%" if same_proto else "Tham khảo (chú ý lệch giao thức 1 bước vs 141 bước)"))
+            )
+            diag_rows.append((
+                "Diebold-Mariano", pair,
+                dm["dm_mse"], dm["p_mse"], dm["dm_mae"], dm["p_mae"],
+                sig, "Cùng giao thức" if same_proto else "Lệch giao thức", interp
+            ))
+        for idx, row_vals in enumerate(diag_rows):
+            r = dm_hdr_r + 1 + idx
+            for c_i, val in enumerate(row_vals, start=1):
+                ws.cell(r, c_i, val)
+            apply_row_style(
+                ws, r, 1, 9,
+                alignments=[AL_CENTER, AL_LEFT, AL_RIGHT, AL_RIGHT, AL_RIGHT, AL_RIGHT, AL_CENTER, AL_CENTER, AL_LEFT],
+                num_formats={2: "0.0000", 3: "0.0000", 4: "0.0000", 5: "0.0000"},
+                fill=FILL_SUBHEADER if row_vals[0] == "Ljung-Box" else (FILL_ZEBRA if idx % 2 == 1 else FILL_WHITE),
+                bold_cols=[0, 1],
+                height=24,
+            )
+        last_table_r = dm_hdr_r + len(diag_rows)
+        chart_sec_r = last_table_r + 2
+        chart_title = "5. TRỰC QUAN HÓA SO SÁNH 5 MÔ HÌNH (BIỂU ĐỒ EXCEL TƯƠNG TÁC & ẢNH BÁO CÁO 300 DPI)"
+    else:
+        last_table_r = fi_sum_r
+        chart_sec_r = fi_sum_r + 2
+        chart_title = "4. TRỰC QUAN HÓA SO SÁNH 5 MÔ HÌNH (BIỂU ĐỒ EXCEL TƯƠNG TÁC & ẢNH BÁO CÁO 300 DPI)"
+
+    # Phần 5 (hoặc 4): Biểu đồ Cột Excel Native + Nhúng ảnh 300 DPI bên dưới bảng
+    style_section_title(ws, chart_sec_r, 1, 9, chart_title)
 
     chart = BarChart()
     chart.type = "col"
@@ -1229,9 +1348,9 @@ def build_sheet_models(wb):
     add_embedded_image(ws, img_410, f"A{chart_sec_r + 2 + row_offset}", max_width_px=640)
 
     ws.freeze_panes = "A6"
-    widths_6 = {1: 16, 2: 26, 3: 26, 4: 38, 5: 13, 6: 16, 7: 16, 8: 22, 9: 56}
+    widths_6 = {1: 16, 2: 28, 3: 24, 4: 38, 5: 14, 6: 16, 7: 16, 8: 22, 9: 58}
     set_col_widths(ws, widths_6)
-    auto_fit_rows(ws, 5, fi_sum_r, widths_6, start_col=1, end_col=9)
+    auto_fit_rows(ws, 5, last_table_r, widths_6, start_col=1, end_col=9)
 
 
 def main():

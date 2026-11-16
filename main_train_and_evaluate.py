@@ -38,6 +38,7 @@ from src.inventory_optimizer import (
     calculate_inventory_policy, compute_abc_xyz_analysis,
     plot_inventory_simulation, plot_abc_xyz_matrix
 )
+from src.extra_diagnostics import main as run_extra_diagnostics
 
 
 def main():
@@ -182,6 +183,17 @@ def main():
         backup_csv_path = os.path.join(REPORTS_DIR, "abc_xyz_analysis_s001_latest.csv")
         abc_xyz_df.to_csv(backup_csv_path, index=False)
         print(f"    [Thông báo] File {abc_xyz_csv_path} đang mở trong ứng dụng khác. Đã lưu tại: {backup_csv_path}")
+
+    # BƯỚC 7: CHẠY CÁC KIỂM ĐỊNH & ĐỐI CHỨNG MỞ RỘNG (NAIVE, BỎ INVENTORY LEVEL, ĐỆ QUY 141 BƯỚC, LJUNG-BOX, DM)
+    print("\n[BƯỚC 7] Thực thi các thí nghiệm đối chứng và kiểm định thống kê mở rộng (Mục 4.3.4–4.3.5)...")
+    run_extra_diagnostics()
+    diag_json_path = os.path.join(REPORTS_DIR, "extra_diagnostics_s001_p0001.json")
+    if os.path.exists(diag_json_path):
+        with open(diag_json_path, "r", encoding="utf-8") as df_diag:
+            metadata["extra_diagnostics"] = json.load(df_diag)
+        with open(os.path.join(SAVED_MODELS_DIR, "model_metadata.json"), "w", encoding="utf-8") as f:
+            json.dump(metadata, f, indent=4, ensure_ascii=False)
+        print(f"    Đã đồng bộ metadata đối chứng mở rộng vào saved_models/model_metadata.json")
 
     print("\n" + "=" * 75)
     print("   HOÀN THÀNH TOÀN BỘ QUY TRÌNH ML & TỐI ƯU TỒN KHO!")

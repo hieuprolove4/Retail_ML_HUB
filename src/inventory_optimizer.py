@@ -63,21 +63,27 @@ def calculate_inventory_policy(sku_df, forecast_daily_demand=None, lead_time=LEA
     # Mức tồn kho hiện tại (ngày gần nhất)
     current_inventory = float(sku_df['Inventory Level'].iloc[-1])
     
+    rop_int = int(np.ceil(reorder_point))
+
     # 3. Đánh giá trạng thái và Đề xuất lượng đặt hàng
+    # Quy tắc thực nghiệm (s, S): khi chưa có chi phí đặt hàng K và chi phí lưu kho h để giải EOQ,
+    # đặt mức tồn kho mục tiêu S = 1.5 * ROP (tạo vùng đệm bổ sung 50% phía trên ngưỡng đặt hàng lại).
     if current_inventory <= reorder_point:
         status = "🔴 NGUY CẤP (CẦN ĐẶT HÀNG NGAY)"
         status_code = "CRITICAL"
-        # Đặt bù đắp lên mức tồn kho mục tiêu (1.5 lần ROP)
         target_inventory = reorder_point * 1.5
         suggested_order = max(0, int(np.ceil(target_inventory - current_inventory)))
+        suggested_order_rounded = max(0, int(np.ceil(rop_int * 1.5 - current_inventory)))
     elif current_inventory <= reorder_point * 1.2:
         status = "🟡 CẢNH BÁO (SẮP CHẠM NGƯỠNG ROP)"
         status_code = "WARNING"
         suggested_order = 0
+        suggested_order_rounded = 0
     else:
         status = "🟢 AN TOÀN (TỒN KHO ĐỦ ĐÁP ỨNG)"
         status_code = "SAFE"
         suggested_order = 0
+        suggested_order_rounded = 0
 
     return {
         'Store ID': sku_df['Store ID'].iloc[-1],
@@ -90,11 +96,13 @@ def calculate_inventory_policy(sku_df, forecast_daily_demand=None, lead_time=LEA
         'Service Level': f"{round(service_level * 100)}%",
         'Z Score': round(float(z_score), 3),
         'Safety Stock (SS)': int(np.ceil(safety_stock)),
-        'Reorder Point (ROP)': int(np.ceil(reorder_point)),
+        'Reorder Point (ROP)': rop_int,
+        'Reorder Point Unrounded': round(float(reorder_point), 2),
         'Current Inventory': int(current_inventory),
         'Status': status,
         'Status Code': status_code,
-        'Suggested Order Qty': suggested_order
+        'Suggested Order Qty': suggested_order,
+        'Suggested Order Qty (Rounded ROP)': suggested_order_rounded,
     }
 
 
@@ -135,6 +143,9 @@ def compute_abc_xyz_analysis(df, store_id="S001"):
     summary['ABC_Class'] = summary['Cumulative_Share'].apply(classify_abc)
 
     # 2. Phân loại XYZ theo Hệ số biến thiên (CV)
+    # Lưu ý: với dữ liệu mô phỏng Kaggle (CV của 20 SKU tại S001 nằm trong khoảng 0,758–0,834),
+    # ngưỡng cố định CV > 0,70 khiến cả 20 mã dồn vào cột Z (suy biến); trong y văn (Syntetos và cộng sự, 2016)
+    # ngưỡng biến động mạnh thường đặt ở CV > 1,0 hoặc hiệu chỉnh theo phân phối CV thực tế.
     summary['CV'] = summary['Std_Demand'] / (summary['Mean_Demand'] + 1e-6)
 
     def classify_xyz(cv):
