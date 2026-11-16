@@ -15,7 +15,7 @@ export async function renderOverviewPage(container) {
     ]);
 
     container.innerHTML = `
-      <!-- 6 Thẻ KPI tổng quan -->
+      <!-- 5 Thẻ KPI tổng quan -->
       <section class="kpi-grid" aria-label="Chỉ số tổng quan hệ thống">
         <div class="kpi-card">
           <div class="kpi-top">
@@ -71,7 +71,7 @@ export async function renderOverviewPage(container) {
               <i data-lucide="trending-up" style="width:18px;height:18px"></i>
               <span>Xu hướng sản lượng bán & Đường trung bình trượt (Moving Average)</span>
             </div>
-            <div class="card-subtitle">Tương ứng Hình 1.1 trong báo cáo — Hỗ trợ lọc theo cửa hàng, sản phẩm và tần suất Ngày / Tuần / Tháng</div>
+            <div class="card-subtitle">Hỗ trợ lọc theo cửa hàng, sản phẩm và tần suất Ngày / Tuần / Tháng</div>
           </div>
 
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -102,7 +102,7 @@ export async function renderOverviewPage(container) {
             <div>
               <div class="card-title">
                 <i data-lucide="pie-chart" style="width:18px;height:18px"></i>
-                <span>Tổng sản lượng theo Ngành hàng (Hình 1.2)</span>
+                <span>Tổng sản lượng theo Ngành hàng</span>
               </div>
               <div class="card-subtitle">Phân bổ nhu cầu giữa 5 nhóm ngành hàng</div>
             </div>
@@ -115,7 +115,7 @@ export async function renderOverviewPage(container) {
             <div>
               <div class="card-title">
                 <i data-lucide="building-2" style="width:18px;height:18px"></i>
-                <span>Tổng sản lượng theo Cửa hàng (Hình 1.3)</span>
+                <span>Tổng sản lượng theo Cửa hàng</span>
               </div>
               <div class="card-subtitle">So sánh quy mô tiêu thụ giữa 5 cửa hàng S001 – S005</div>
             </div>
@@ -128,7 +128,7 @@ export async function renderOverviewPage(container) {
             <div>
               <div class="card-title">
                 <i data-lucide="cloud-sun" style="width:18px;height:18px"></i>
-                <span>Sản lượng bán trung bình theo Thời tiết (Hình 1.4)</span>
+                <span>Sản lượng bán trung bình theo Thời tiết</span>
               </div>
               <div class="card-subtitle">Ảnh hưởng của điều kiện thời tiết tới sức mua hàng ngày</div>
             </div>
@@ -141,7 +141,7 @@ export async function renderOverviewPage(container) {
             <div>
               <div class="card-title">
                 <i data-lucide="calendar-range" style="width:18px;height:18px"></i>
-                <span>Mùa vụ & Hiệu ứng Khuyến mãi (Hình 1.5)</span>
+                <span>Mùa vụ & Hiệu ứng Khuyến mãi</span>
               </div>
               <div class="card-subtitle">Sản lượng trung bình/ngày theo 4 mùa và chương trình khuyến mãi</div>
             </div>

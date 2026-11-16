@@ -64,11 +64,6 @@ def plot_model_result(dates_train, y_train, dates_test, y_test, y_pred, model_na
     filename_vn = f"chuong_4_hinh_{clean_num}_{model_slug}.png"
     save_path_vn = os.path.join(FIGURES_MODELS_DIR, filename_vn)
     plt.savefig(save_path_vn, bbox_inches='tight')
-
-    # Lưu thêm phiên bản tên gốc để đảm bảo tương thích ngược hoàn toàn
-    filename_orig = f"figure_{clean_num.replace('_', '.')}_{model_slug}.png"
-    save_path_orig = os.path.join(FIGURES_MODELS_DIR, filename_orig)
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     return save_path_vn
 
@@ -153,9 +148,7 @@ def plot_metrics_comparison(results_df):
     plt.suptitle('Hình 4.9 [Chương 4 - Đánh giá Mô hình]: So sánh Định lượng Hiệu năng 5 Mô hình Dự báo (RMSE, MAE, MAPE)', fontsize=14, fontweight='bold', y=1.03)
     plt.tight_layout()
     save_path_vn = os.path.join(FIGURES_MODELS_DIR, 'chuong_4_hinh_4_9_so_sanh_hieu_nang_mo_hinh.png')
-    save_path_orig = os.path.join(FIGURES_MODELS_DIR, 'figure_4_9_models_benchmark_comparison.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     return save_path_vn
 
@@ -177,8 +170,6 @@ def plot_feature_importance(model, feature_names, top_n=10):
     plt.tight_layout()
 
     save_path_vn = os.path.join(FIGURES_MODELS_DIR, 'chuong_4_hinh_4_10_tam_quan_trong_dac_trung.png')
-    save_path_orig = os.path.join(FIGURES_MODELS_DIR, 'figure_4_10_feature_importance.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     return save_path_vn

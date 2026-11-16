@@ -35,7 +35,7 @@ export function baseChartOptions(overrides = {}) {
   return {
     ...rest,
     chart: {
-      fontFamily: "'Fira Sans', sans-serif",
+      fontFamily: "'Inter', sans-serif",
       background: 'transparent',
       foreColor: t.textColor,
       toolbar: {

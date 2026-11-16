@@ -1,7 +1,5 @@
 /**
  * Page 2: Dự báo nhu cầu sản phẩm (forecast.js)
- * Hiển thị lịch sử 60 ngày + dự báo tương lai kèm khoảng tin cậy 95%, chỉ số đánh giá,
- * hộp giả định dự báo và bảng dữ liệu xuất CSV.
  */
 
 import { apiPost, appState, updateState, getOptions } from '../api.js';
@@ -22,7 +20,7 @@ export async function renderForecastPage(container) {
             <i data-lucide="sliders" style="width:18px;height:18px"></i>
             <span>Cấu hình dự báo nhu cầu theo SKU</span>
           </div>
-          <div class="card-subtitle">Chọn cửa hàng, sản phẩm, mô hình học máy và chân trời dự báo tương lai</div>
+          <div class="card-subtitle">Chọn cửa hàng, sản phẩm, mô hình học máy và số ngày dự báo tương lai</div>
         </div>
         <span class="badge badge-INFO" id="fc-source-badge">Đang tải...</span>
       </div>
@@ -82,7 +80,7 @@ export async function renderForecastPage(container) {
           <div class="kpi-icon"><i data-lucide="gauge" style="width:17px;height:17px"></i></div>
         </div>
         <div class="kpi-value" id="fc-kpi-rmse">—</div>
-        <div class="kpi-meta">Đánh giá trên tập Test (20%)</div>
+        <div class="kpi-meta">Đánh giá trên tập kiểm thử</div>
       </div>
 
       <div class="kpi-card">
@@ -100,7 +98,7 @@ export async function renderForecastPage(container) {
           <div class="kpi-icon"><i data-lucide="percent" style="width:17px;height:17px"></i></div>
         </div>
         <div class="kpi-value" id="fc-kpi-mape">—</div>
-        <div class="kpi-meta">Tỷ lệ phần trăm sai số tuyệt đối</div>
+        <div class="kpi-meta">Tỷ lệ phần trăm sai số</div>
       </div>
     </section>
 
@@ -112,7 +110,7 @@ export async function renderForecastPage(container) {
             <i data-lucide="line-chart" style="width:18px;height:18px"></i>
             <span id="fc-chart-title">Biểu đồ Lịch sử 60 ngày & Dự báo tương lai</span>
           </div>
-          <div class="card-subtitle">Đường nét liền xanh: Nhu cầu thực tế | Đường nét đứt cam: Dự báo | Vùng mờ: Khoảng tin cậy 95%</div>
+          <div class="card-subtitle">Đường nét liền xanh: Nhu cầu thực tế | Đường nét đứt cam: Dự báo | Vùng giới hạn: Khoảng tin cậy 95%</div>
         </div>
         <div style="display:flex;gap:8px">
           <a href="#/inventory" class="btn btn-outline" title="Xem trạng thái tồn kho của cửa hàng này">
@@ -133,7 +131,7 @@ export async function renderForecastPage(container) {
               <i data-lucide="table-2" style="width:18px;height:18px"></i>
               <span>Bảng chi tiết dự báo theo ngày</span>
             </div>
-            <div class="card-subtitle">Số lượng dự báo điểm và cận dưới / cận trên (95% CI)</div>
+            <div class="card-subtitle">Số lượng dự báo điểm và cận dưới / cận trên</div>
           </div>
           <button type="button" class="btn btn-outline" id="fc-export-btn">
             <i data-lucide="download" style="width:16px;height:16px"></i>
@@ -164,7 +162,7 @@ export async function renderForecastPage(container) {
               <i data-lucide="info" style="width:18px;height:18px"></i>
               <span>Cơ chế & Giả định dự báo</span>
             </div>
-            <div class="card-subtitle">Giải thích minh bạch cách mô hình tạo dự báo tương lai</div>
+            <div class="card-subtitle">Thông tin vận hành của mô hình khi tạo dự báo tương lai</div>
           </div>
         </div>
         <div class="callout">
@@ -254,13 +252,8 @@ async function executeForecast(container) {
     container.querySelector('#fc-kpi-mape').textContent = `${fmtDec(data.metrics['MAPE (%)'])}%`;
 
     const badge = container.querySelector('#fc-source-badge');
-    if (data.metrics_source === 'report') {
-      badge.className = 'badge badge-SAFE';
-      badge.textContent = 'Khớp số liệu Báo cáo (S001 - P0001)';
-    } else {
-      badge.className = 'badge badge-INFO';
-      badge.textContent = `Huấn luyện trực tiếp cho ${data.store_id} - ${data.product_id}`;
-    }
+    badge.className = 'badge badge-INFO';
+    badge.textContent = `${data.store_id} - ${data.product_id} • ${data.model_used}`;
 
     container.querySelector('#fc-chart-title').textContent =
       `Lịch sử 60 ngày & Dự báo ${data.horizon} ngày tới — ${data.store_id} / ${data.product_id} (${data.category}) — ${data.model_used}`;
@@ -301,7 +294,6 @@ function renderForecastChart(data) {
   const histLen = data.history.dates.length;
   const fcLen = data.forecast.dates.length;
 
-  // Nối điểm cuối lịch sử vào đầu chuỗi dự báo để đường biểu đồ liền mạch
   const lastHistVal = data.history.values[histLen - 1];
   const actualSeries = [...data.history.values, ...Array(fcLen).fill(null)];
   const forecastSeries = [

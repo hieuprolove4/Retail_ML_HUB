@@ -199,20 +199,20 @@ class ForecastService:
     def assumptions_text(model_name):
         if model_name in ML_MODELS:
             return [
-                "Dự báo đệ quy: giá trị dự báo của ngày trước được dùng làm biến trễ (lag) cho ngày sau.",
-                "Giá bán, chiết khấu, giá đối thủ và mức tồn kho tương lai = trung bình 14 ngày gần nhất.",
-                "Không giả định khuyến mãi/ngày lễ trong kỳ dự báo.",
-                "Thời tiết và mùa vụ = giá trị phổ biến nhất trong 30 ngày gần nhất.",
-                "Khoảng tin cậy 95% ước lượng bằng ±1.96 × RMSE trên tập kiểm thử.",
+                "Dự báo đệ quy: giá trị dự báo của ngày trước được dùng làm biến trễ cho ngày tiếp theo.",
+                "Giá bán, chiết khấu, giá đối thủ và mức tồn kho tương lai được giữ ở mức trung bình 14 ngày gần nhất.",
+                "Không giả định phát sinh chương trình khuyến mãi mới trong kỳ dự báo.",
+                "Thời tiết và mùa vụ được lấy theo trạng thái phổ biến nhất trong 30 ngày gần nhất.",
+                "Khoảng tin cậy 95% được ước lượng dựa trên sai số kiểm thử của mô hình.",
             ]
         if model_name == 'Exponential Smoothing':
             return [
-                "Mô hình Holt-Winters (xu hướng cộng, mùa vụ cộng, chu kỳ 7 ngày) được fit lại trên toàn bộ lịch sử của SKU.",
-                "Khoảng tin cậy 95% ước lượng bằng ±1.96 × RMSE trên tập kiểm thử.",
+                "Mô hình Holt-Winters (xu hướng cộng, mùa vụ chu kỳ 7 ngày) được huấn luyện trên toàn bộ lịch sử của sản phẩm.",
+                "Khoảng tin cậy 95% được ước lượng dựa trên sai số kiểm thử của mô hình.",
             ]
         return [
-            f"Mô hình {model_name} được fit lại trên toàn bộ lịch sử của SKU (cùng tham số trong báo cáo).",
-            "Khoảng tin cậy 95% lấy trực tiếp từ phân phối dự báo của mô hình.",
+            f"Mô hình {model_name} được huấn luyện trên toàn bộ dữ liệu lịch sử của sản phẩm đang chọn.",
+            "Khoảng tin cậy 95% được trích xuất trực tiếp từ phân phối dự báo của mô hình.",
         ]
 
     def _forecast_ml(self, store_id, product_id, model_name, horizon):

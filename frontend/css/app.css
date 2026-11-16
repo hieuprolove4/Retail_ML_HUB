@@ -223,10 +223,22 @@ html, body {
   background: transparent;
   border: none;
   color: var(--color-foreground);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   cursor: pointer;
+  outline: none;
+}
+
+select option {
+  background-color: var(--color-surface);
+  color: var(--color-foreground);
+  padding: 6px 10px;
+}
+
+[data-theme="dark"] select option {
+  background-color: #111827;
+  color: #F1F5F9;
 }
 
 .icon-btn {

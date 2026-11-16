@@ -144,8 +144,6 @@ ML_Project/
 │   ├── css/                     # tokens.css, app.css
 │   ├── js/                      # router, api client, ui, charts, pages/*
 │   └── vendor/                  # ApexCharts & Lucide (bản local, chạy offline)
-├── design-system/               # Quy chuẩn thiết kế giao diện (MASTER.md)
-├── UI_demo/                     # Bản demo UI một file (index.html) để xem nhanh thiết kế
 └── saved_models/
     └── model_metadata.json      # Chỉ số & metadata của 5 mô hình (ĐƯỢC commit)
                                  # (các file *.pkl KHÔNG commit — xem mục 6)
@@ -223,5 +221,3 @@ Repo được cố ý giữ nhẹ, các thành phần sau bị `.gitignore` (kh�
 ## 8. Ghi chú thêm
 
 - `frontend/vendor/` chứa bản local của ApexCharts và Lucide để dashboard chạy được cả khi offline / khi trình duyệt chặn CDN.
-- `UI_demo/index.html` là bản demo giao diện một file duy nhất (dùng CDN), tiện để xem nhanh ý tưởng thiết kế mà không cần chạy backend.
-- `design-system/retail-ml-hub/MASTER.md` là quy chuẩn màu sắc/typography dùng khi dựng giao diện `frontend/`.

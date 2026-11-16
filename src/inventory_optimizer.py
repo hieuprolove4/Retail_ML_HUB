@@ -175,9 +175,7 @@ def plot_inventory_simulation(sku_df, policy, window_days=60):
     plt.tight_layout()
 
     save_path_vn = os.path.join(FIGURES_INVENTORY_DIR, 'chuong_4_hinh_4_11_mo_phong_ton_kho_rop.png')
-    save_path_orig = os.path.join(FIGURES_INVENTORY_DIR, 'figure_4_11_inventory_rop_simulation.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     return save_path_vn
 
@@ -206,8 +204,6 @@ def plot_abc_xyz_matrix(abc_xyz_df):
     plt.tight_layout()
 
     save_path_vn = os.path.join(FIGURES_INVENTORY_DIR, 'chuong_4_hinh_4_12_ma_tran_abc_xyz.png')
-    save_path_orig = os.path.join(FIGURES_INVENTORY_DIR, 'figure_4_12_abc_xyz_matrix.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     return save_path_vn

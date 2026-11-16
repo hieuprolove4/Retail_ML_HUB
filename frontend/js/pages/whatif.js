@@ -1,11 +1,9 @@
 /**
  * Page 6: Mô phỏng Kịch bản What-If Chuỗi cung ứng (whatif.js)
- * Cho phép điều chỉnh Lead Time (1–14 ngày), Service Level (90/95/99%) và Nguồn dự báo,
- * so sánh trực tiếp với chính sách chuẩn (L=3 ngày, SL=95%).
  */
 
 import { apiGet, appState, updateState, getOptions } from '../api.js';
-import { fmtInt, fmtDec, statusBadge, refreshIcons, renderError } from '../ui.js';
+import { fmtInt, statusBadge, refreshIcons, renderError } from '../ui.js';
 import { baseChartOptions, getChartTheme, mountChart } from '../charts.js';
 
 export async function renderWhatIfPage(container) {
@@ -17,10 +15,10 @@ export async function renderWhatIfPage(container) {
         <div>
           <div class="card-title">
             <i data-lucide="sliders-horizontal" style="width:18px;height:18px"></i>
-            <span>Mô phỏng Kịch bản What-If (Độ nhạy Lead Time & Mức độ dịch vụ)</span>
+            <span>Mô phỏng Kịch bản What-If (Độ nhạy Thời gian giao hàng & Mức độ dịch vụ)</span>
           </div>
           <div class="card-subtitle">
-            Đối chiếu chính sách chuẩn trong báo cáo (L = 3 ngày, SL = 95%) với kịch bản tùy chỉnh khi thời gian giao hàng bị kéo dài hoặc nâng mức dịch vụ
+            Đối chiếu chính sách mặc định (L = 3 ngày, SL = 95%) với kịch bản tùy chỉnh khi thời gian giao hàng thay đổi hoặc nâng mức dịch vụ
           </div>
         </div>
       </div>
@@ -41,7 +39,7 @@ export async function renderWhatIfPage(container) {
         </div>
 
         <div class="form-field range-wrap">
-          <label for="wi-lead">Lead Time giả định: <strong id="wi-lead-val">5</strong> ngày (Chuẩn: 3 ngày)</label>
+          <label for="wi-lead">Thời gian giao hàng giả định: <strong id="wi-lead-val">5</strong> ngày (Mặc định: 3 ngày)</label>
           <input id="wi-lead" type="range" min="1" max="14" step="1" value="5" />
         </div>
 
@@ -49,14 +47,14 @@ export async function renderWhatIfPage(container) {
           <label for="wi-sl">Mức độ dịch vụ giả định (Service Level)</label>
           <select id="wi-sl" class="form-control">
             <option value="0.90">90% (Tiết kiệm vốn lưu kho)</option>
-            <option value="0.95">95% (Cân bằng chuẩn)</option>
+            <option value="0.95">95% (Cân bằng mặc định)</option>
             <option value="0.98">98% (Ưu tiên chống đứt gãy)</option>
             <option value="0.99" selected>99% (An toàn tối đa)</option>
           </select>
         </div>
 
         <div class="form-field">
-          <label for="wi-source">Nguồn nhu cầu D̂</label>
+          <label for="wi-source">Nguồn dữ liệu nhu cầu</label>
           <select id="wi-source" class="form-control">
             <option value="model" selected>Dự báo ML (${opts.best_model})</option>
             <option value="average">Trung bình 90 ngày</option>
@@ -73,7 +71,7 @@ export async function renderWhatIfPage(container) {
           <div class="kpi-icon"><i data-lucide="shield-check" style="width:17px;height:17px"></i></div>
         </div>
         <div class="kpi-value" id="wi-ss-diff">—</div>
-        <div class="kpi-meta" id="wi-ss-sub">Chuẩn: — → Kịch bản: —</div>
+        <div class="kpi-meta" id="wi-ss-sub">Mặc định: — → Kịch bản: —</div>
       </div>
 
       <div class="kpi-card">
@@ -82,7 +80,7 @@ export async function renderWhatIfPage(container) {
           <div class="kpi-icon"><i data-lucide="flag" style="width:17px;height:17px"></i></div>
         </div>
         <div class="kpi-value" id="wi-rop-diff">—</div>
-        <div class="kpi-meta" id="wi-rop-sub">Chuẩn: — → Kịch bản: —</div>
+        <div class="kpi-meta" id="wi-rop-sub">Mặc định: — → Kịch bản: —</div>
       </div>
 
       <div class="kpi-card">
@@ -91,7 +89,7 @@ export async function renderWhatIfPage(container) {
           <div class="kpi-icon"><i data-lucide="truck" style="width:17px;height:17px"></i></div>
         </div>
         <div class="kpi-value" id="wi-order-diff">—</div>
-        <div class="kpi-meta" id="wi-order-sub">Chuẩn: — → Kịch bản: —</div>
+        <div class="kpi-meta" id="wi-order-sub">Mặc định: — → Kịch bản: —</div>
       </div>
 
       <div class="kpi-card">
@@ -100,7 +98,7 @@ export async function renderWhatIfPage(container) {
           <div class="kpi-icon"><i data-lucide="boxes" style="width:17px;height:17px"></i></div>
         </div>
         <div class="kpi-value" id="wi-store-order">—</div>
-        <div class="kpi-meta" id="wi-store-order-sub">So với chuẩn: —</div>
+        <div class="kpi-meta" id="wi-store-order-sub">So với mặc định: —</div>
       </div>
     </section>
 
@@ -111,7 +109,7 @@ export async function renderWhatIfPage(container) {
           <div>
             <div class="card-title">
               <i data-lucide="bar-chart-2" style="width:18px;height:18px"></i>
-              <span id="wi-chart-title">So sánh Chính sách chuẩn vs Kịch bản What-If</span>
+              <span id="wi-chart-title">So sánh Chính sách mặc định vs Kịch bản What-If</span>
             </div>
             <div class="card-subtitle">Đối chiếu Tồn hiện tại, Safety Stock, ROP và Lượng đặt hàng đề xuất</div>
           </div>
@@ -124,9 +122,9 @@ export async function renderWhatIfPage(container) {
           <div>
             <div class="card-title">
               <i data-lucide="list-checks" style="width:18px;height:18px"></i>
-              <span>Bảng chênh lệch ROP & Lượng đặt hàng (Top 10 SKU biến động)</span>
+              <span>Bảng chênh lệch ROP & Lượng đặt hàng</span>
             </div>
-            <div class="card-subtitle">Tác động của kịch bản lên toàn bộ cửa hàng</div>
+            <div class="card-subtitle">Tác động của kịch bản lên các sản phẩm trong cửa hàng</div>
           </div>
         </div>
         <div class="table-wrap" style="max-height:290px;overflow-y:auto">
@@ -134,9 +132,9 @@ export async function renderWhatIfPage(container) {
             <thead>
               <tr>
                 <th>SKU</th>
-                <th class="num">ROP chuẩn</th>
+                <th class="num">ROP mặc định</th>
                 <th class="num">ROP kịch bản</th>
-                <th class="num">Đặt chuẩn</th>
+                <th class="num">Đặt mặc định</th>
                 <th class="num">Đặt kịch bản</th>
                 <th>Trạng thái mới</th>
               </tr>
@@ -208,21 +206,21 @@ async function executeSimulation(container, params) {
     };
 
     container.querySelector('#wi-ss-diff').textContent = fmtDelta(baseItem.safety_stock, simItem.safety_stock);
-    container.querySelector('#wi-ss-sub').textContent = `Chuẩn: ${fmtInt(baseItem.safety_stock)} → Kịch bản: ${fmtInt(simItem.safety_stock)}`;
+    container.querySelector('#wi-ss-sub').textContent = `Mặc định: ${fmtInt(baseItem.safety_stock)} → Kịch bản: ${fmtInt(simItem.safety_stock)}`;
 
     container.querySelector('#wi-rop-diff').textContent = fmtDelta(baseItem.reorder_point, simItem.reorder_point);
-    container.querySelector('#wi-rop-sub').textContent = `Chuẩn: ${fmtInt(baseItem.reorder_point)} → Kịch bản: ${fmtInt(simItem.reorder_point)}`;
+    container.querySelector('#wi-rop-sub').textContent = `Mặc định: ${fmtInt(baseItem.reorder_point)} → Kịch bản: ${fmtInt(simItem.reorder_point)}`;
 
     container.querySelector('#wi-order-diff').textContent = fmtDelta(baseItem.suggested_order, simItem.suggested_order);
-    container.querySelector('#wi-order-sub').textContent = `Chuẩn: ${fmtInt(baseItem.suggested_order)} → Kịch bản: ${fmtInt(simItem.suggested_order)}`;
+    container.querySelector('#wi-order-sub').textContent = `Mặc định: ${fmtInt(baseItem.suggested_order)} → Kịch bản: ${fmtInt(simItem.suggested_order)}`;
 
     const totalBase = baseData.items.reduce((s, x) => s + x.suggested_order, 0);
     const totalSim = simData.items.reduce((s, x) => s + x.suggested_order, 0);
     container.querySelector('#wi-store-order').textContent = `${fmtInt(totalSim)} đv`;
-    container.querySelector('#wi-store-order-sub').textContent = `Chuẩn (L=3, 95%): ${fmtInt(totalBase)} đv (Chênh: ${totalSim - totalBase >= 0 ? '+' : ''}${fmtInt(totalSim - totalBase)})`;
+    container.querySelector('#wi-store-order-sub').textContent = `Mặc định (L=3, 95%): ${fmtInt(totalBase)} đv (Chênh: ${totalSim - totalBase >= 0 ? '+' : ''}${fmtInt(totalSim - totalBase)})`;
 
     container.querySelector('#wi-chart-title').textContent =
-      `So sánh SKU ${simItem.product_id} (${simItem.category}) — Chuẩn (L=3, 95%) vs Kịch bản (L=${params.lead_time}, ${Math.round(params.service_level * 100)}%)`;
+      `So sánh SKU ${simItem.product_id} (${simItem.category}) — Mặc định (L=3, 95%) vs Kịch bản (L=${params.lead_time}, ${Math.round(params.service_level * 100)}%)`;
 
     const t = getChartTheme();
     mountChart(
@@ -231,7 +229,7 @@ async function executeSimulation(container, params) {
         chart: { type: 'bar', height: 290 },
         series: [
           {
-            name: 'Chính sách chuẩn (L=3, SL=95%)',
+            name: 'Chính sách mặc định (L=3, SL=95%)',
             data: [baseItem.current_inventory, baseItem.safety_stock, baseItem.reorder_point, baseItem.suggested_order],
           },
           {
@@ -248,7 +246,6 @@ async function executeSimulation(container, params) {
       })
     );
 
-    // Bảng chênh lệch
     const baseMap = Object.fromEntries(baseData.items.map((x) => [x.product_id, x]));
     const tbody = container.querySelector('#wi-table-body');
     tbody.innerHTML = simData.items

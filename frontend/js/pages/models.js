@@ -1,6 +1,5 @@
 /**
  * Page 3: So sánh định lượng 5 Mô hình Dự báo & Feature Importance (models.js)
- * Tương ứng Bảng 4.2, Hình 4.4–4.10 trong báo cáo.
  */
 
 import { apiGet, appState, updateState, getOptions } from '../api.js';
@@ -17,9 +16,9 @@ export async function renderModelsPage(container) {
         <div>
           <div class="card-title">
             <i data-lucide="git-compare" style="width:18px;height:18px"></i>
-            <span>Đánh giá & So sánh hiệu năng 5 Mô hình Dự báo (Train 80% / Test 20%)</span>
+            <span>Đánh giá & So sánh hiệu năng 5 Mô hình Dự báo</span>
           </div>
-          <div class="card-subtitle">Đối chiếu ARIMA, SARIMA, Holt-Winters, Random Forest và XGBoost theo chuẩn Bảng 4.2 trong báo cáo</div>
+          <div class="card-subtitle">Đối chiếu độ chính xác giữa ARIMA, SARIMA, Holt-Winters, Random Forest và XGBoost</div>
         </div>
         <span class="badge badge-INFO" id="mdl-source-badge">Đang tải...</span>
       </div>
@@ -48,14 +47,14 @@ export async function renderModelsPage(container) {
       </div>
     </section>
 
-    <!-- Bảng 4.2 + Biểu đồ cột so sánh RMSE / MAE / MAPE -->
+    <!-- Bảng so sánh + Biểu đồ cột so sánh RMSE / MAE -->
     <div class="grid-2">
       <section class="card">
         <div class="card-header">
           <div>
             <div class="card-title">
               <i data-lucide="award" style="width:18px;height:18px"></i>
-              <span>Bảng so sánh các chỉ số đánh giá (Table 4.2)</span>
+              <span>Bảng xếp hạng các chỉ số đánh giá</span>
             </div>
             <div class="card-subtitle">Xếp hạng từ tốt nhất đến thấp nhất theo chỉ số RMSE</div>
           </div>
@@ -83,38 +82,38 @@ export async function renderModelsPage(container) {
           <div>
             <div class="card-title">
               <i data-lucide="bar-chart-3" style="width:18px;height:18px"></i>
-              <span>Biểu đồ so sánh RMSE & MAE (Hình 4.9)</span>
+              <span>Biểu đồ so sánh sai số RMSE & MAE</span>
             </div>
-            <div class="card-subtitle">Giá trị càng thấp chứng tỏ độ chính xác dự báo càng cao</div>
+            <div class="card-subtitle">Giá trị sai số càng thấp thể hiện độ chính xác dự báo càng cao</div>
           </div>
         </div>
         <div id="mdl-metrics-chart" style="min-height:260px"></div>
       </section>
     </div>
 
-    <!-- Biểu đồ Actual vs Predicted trên tập Test (20%) -->
+    <!-- Biểu đồ Actual vs Predicted trên tập Test -->
     <section class="card">
       <div class="card-header">
         <div>
           <div class="card-title">
             <i data-lucide="activity" style="width:18px;height:18px"></i>
-            <span>Đối chiếu Thực tế vs Dự báo trên Tập kiểm thử 20% (Hình 4.4 – 4.8)</span>
+            <span>Đối chiếu Thực tế vs Dự báo trên Tập kiểm thử</span>
           </div>
-          <div class="card-subtitle">Nhấn vào tên mô hình ở chú giải (legend) phía trên biểu đồ để bật / tắt từng đường dự báo</div>
+          <div class="card-subtitle">Nhấn vào tên mô hình ở chú giải phía trên biểu đồ để bật / tắt từng đường dự báo</div>
         </div>
       </div>
       <div id="mdl-test-chart" style="min-height:360px"></div>
     </section>
 
-    <!-- Feature Importance (Hình 4.10) -->
+    <!-- Feature Importance -->
     <section class="card">
       <div class="card-header">
         <div>
           <div class="card-title">
             <i data-lucide="sparkles" style="width:18px;height:18px"></i>
-            <span>Top 10 Đặc trưng quan trọng nhất (Feature Importance — Hình 4.10)</span>
+            <span>Top 10 Đặc trưng quan trọng nhất (Feature Importance)</span>
           </div>
-          <div class="card-subtitle">Trích xuất từ mô hình cây quyết định huấn luyện trên SKU chuẩn của báo cáo (S001 - P0001)</div>
+          <div class="card-subtitle">Mức độ đóng góp của từng biến đầu vào đối với mô hình dự báo</div>
         </div>
 
         <div class="segmented" role="group" aria-label="Chọn mô hình cây">
@@ -164,13 +163,8 @@ async function loadComparison(container) {
     });
 
     const badge = container.querySelector('#mdl-source-badge');
-    if (data.metrics_source === 'report') {
-      badge.className = 'badge badge-SAFE';
-      badge.textContent = `Số liệu chuẩn Báo cáo (${data.store_id} - ${data.product_id}) • Tốt nhất: ${data.best_model}`;
-    } else {
-      badge.className = 'badge badge-INFO';
-      badge.textContent = `Đánh giá trực tiếp (${data.store_id} - ${data.product_id}) • Tốt nhất: ${data.best_model}`;
-    }
+    badge.className = 'badge badge-INFO';
+    badge.textContent = `${data.store_id} - ${data.product_id} • Tốt nhất: ${data.best_model}`;
 
     const sorted = [...data.results].sort((a, b) => a.RMSE - b.RMSE);
     const tbody = container.querySelector('#mdl-table-body');
@@ -212,12 +206,12 @@ async function loadComparison(container) {
       })
     );
 
-    // Biểu đồ đường trên tập Test (lấy 90 ngày cuối của tập test cho rõ)
+    // Biểu đồ đường trên tập Test (lấy 90 ngày cuối của tập test)
     const sliceN = 90;
     const dates = data.test.dates.slice(-sliceN);
     const actual = data.test.actual.slice(-sliceN);
     const series = [
-      { name: 'Thực tế (Actual Test)', data: actual },
+      { name: 'Thực tế (Actual)', data: actual },
       ...sorted.map((r) => ({
         name: r.model,
         data: (data.test.pred[r.model] || []).slice(-sliceN),

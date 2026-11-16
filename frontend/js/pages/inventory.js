@@ -1,7 +1,5 @@
 /**
  * Page 4: Tồn kho & Cảnh báo Điểm đặt hàng lại ROP (inventory.js)
- * Kết nối trực tiếp nhu cầu dự báo từ mô hình tốt nhất vào công thức SS & ROP,
- * lọc theo trạng thái CRITICAL / WARNING / SAFE và vẽ biểu đồ diễn biến tồn kho 90 ngày.
  */
 
 import { apiGet, appState, updateState, getOptions } from '../api.js';
@@ -10,10 +8,11 @@ import { baseChartOptions, getChartTheme, mountChart } from '../charts.js';
 
 let currentItems = [];
 let statusFilter = 'ALL';
-let searchKeyword = '';
+let productFilter = 'ALL';
 
 export async function renderInventoryPage(container) {
   const opts = await getOptions();
+  productFilter = 'ALL';
 
   container.innerHTML = `
     <!-- Bộ lọc cấu hình tồn kho -->
@@ -24,10 +23,7 @@ export async function renderInventoryPage(container) {
             <i data-lucide="warehouse" style="width:18px;height:18px"></i>
             <span>Kiểm tra tồn kho & Cảnh báo đặt hàng lại (ROP)</span>
           </div>
-          <div class="card-subtitle">
-            Công thức: <code style="font-family:var(--font-mono)">SS = Z × σ_D × √L</code> và
-            <code style="font-family:var(--font-mono)">ROP = (D̂ × L) + SS</code> — Nhu cầu D̂ lấy từ dự báo mô hình học máy
-          </div>
+          <div class="card-subtitle">Theo dõi mức tồn kho thực tế, ngưỡng an toàn và đề xuất số lượng cần nhập cho từng sản phẩm</div>
         </div>
         <span class="badge badge-INFO" id="inv-policy-badge">Đang tính toán...</span>
       </div>
@@ -41,7 +37,15 @@ export async function renderInventoryPage(container) {
         </div>
 
         <div class="form-field">
-          <label for="inv-lead">Thời gian giao hàng (Lead Time L)</label>
+          <label for="inv-product-filter">Sản phẩm (Product ID)</label>
+          <select id="inv-product-filter" class="form-control">
+            <option value="ALL">Tất cả sản phẩm (20 SKU)</option>
+            ${opts.products.map((p) => `<option value="${p.id}">${p.id} — ${p.category}</option>`).join('')}
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="inv-lead">Thời gian giao hàng (Lead Time)</label>
           <select id="inv-lead" class="form-control">
             ${[1, 2, 3, 5, 7, 10, 14].map((d) => `<option value="${d}" ${d === Number(appState.lead_time) ? 'selected' : ''}>${d} ngày</option>`).join('')}
           </select>
@@ -50,23 +54,18 @@ export async function renderInventoryPage(container) {
         <div class="form-field">
           <label for="inv-sl">Mức độ dịch vụ (Service Level)</label>
           <select id="inv-sl" class="form-control">
-            <option value="0.90" ${Number(appState.service_level) === 0.9 ? 'selected' : ''}>90% (Z = 1.28)</option>
-            <option value="0.95" ${Number(appState.service_level) === 0.95 ? 'selected' : ''}>95% (Z = 1.645 — Chuẩn báo cáo)</option>
-            <option value="0.99" ${Number(appState.service_level) === 0.99 ? 'selected' : ''}>99% (Z = 2.33)</option>
+            <option value="0.90" ${Number(appState.service_level) === 0.9 ? 'selected' : ''}>90%</option>
+            <option value="0.95" ${Number(appState.service_level) === 0.95 ? 'selected' : ''}>95% (Mặc định)</option>
+            <option value="0.99" ${Number(appState.service_level) === 0.99 ? 'selected' : ''}>99%</option>
           </select>
         </div>
 
         <div class="form-field">
-          <label for="inv-source">Nguồn nhu cầu dự kiến (D̂)</label>
+          <label for="inv-source">Nguồn dữ liệu nhu cầu</label>
           <select id="inv-source" class="form-control">
             <option value="model" ${appState.demand_source === 'model' ? 'selected' : ''}>Dự báo từ ${opts.best_model} (ML)</option>
             <option value="average" ${appState.demand_source === 'average' ? 'selected' : ''}>Trung bình lịch sử 90 ngày</option>
           </select>
-        </div>
-
-        <div class="form-field">
-          <label for="inv-search">Tìm nhanh mã SKU / Ngành hàng</label>
-          <input id="inv-search" type="search" class="form-control" placeholder="VD: P0001, Groceries..." />
         </div>
       </div>
     </section>
@@ -84,7 +83,7 @@ export async function renderInventoryPage(container) {
 
       <div class="kpi-card clickable" data-filter="CRITICAL" style="border-left:4px solid var(--color-critical)">
         <div class="kpi-top">
-          <span>Nguy cấp (≤ ROP)</span>
+          <span>Nguy cấp</span>
           <div class="kpi-icon" style="background:var(--color-critical-bg);color:var(--color-critical)">
             <i data-lucide="alert-octagon" style="width:17px;height:17px"></i>
           </div>
@@ -95,7 +94,7 @@ export async function renderInventoryPage(container) {
 
       <div class="kpi-card clickable" data-filter="WARNING" style="border-left:4px solid var(--color-warning)">
         <div class="kpi-top">
-          <span>Cảnh báo (≤ 1.2 × ROP)</span>
+          <span>Cảnh báo</span>
           <div class="kpi-icon" style="background:var(--color-warning-bg);color:var(--color-warning)">
             <i data-lucide="alert-triangle" style="width:17px;height:17px"></i>
           </div>
@@ -106,7 +105,7 @@ export async function renderInventoryPage(container) {
 
       <div class="kpi-card clickable" data-filter="SAFE" style="border-left:4px solid var(--color-safe)">
         <div class="kpi-top">
-          <span>An toàn (&gt; 1.2 × ROP)</span>
+          <span>An toàn</span>
           <div class="kpi-icon" style="background:var(--color-safe-bg);color:var(--color-safe)">
             <i data-lucide="check-circle-2" style="width:17px;height:17px"></i>
           </div>
@@ -124,7 +123,7 @@ export async function renderInventoryPage(container) {
             <i data-lucide="activity" style="width:18px;height:18px"></i>
             <span id="inv-sim-title">Diễn biến tồn kho thực tế 90 ngày so với ngưỡng ROP & Safety Stock</span>
           </div>
-          <div class="card-subtitle">Nhấn vào bất kỳ dòng sản phẩm nào trong bảng bên dưới để xem biểu đồ của SKU đó</div>
+          <div class="card-subtitle">Nhấn vào bất kỳ dòng sản phẩm nào trong bảng bên dưới hoặc chọn ở bộ lọc để xem biểu đồ của SKU đó</div>
         </div>
         <a href="#/forecast" class="btn btn-outline">
           <i data-lucide="trending-up" style="width:16px;height:16px"></i>
@@ -142,7 +141,7 @@ export async function renderInventoryPage(container) {
             <i data-lucide="clipboard-list" style="width:18px;height:18px"></i>
             <span>Bảng kiểm tra tồn kho & Đề xuất lượng đặt hàng (20 SKU)</span>
           </div>
-          <div class="card-subtitle">Lượng đặt hàng đề xuất = làm tròn lên <code style="font-family:var(--font-mono)">max(0, 1.5 × ROP − Tồn hiện tại)</code> khi chạm ngưỡng ROP</div>
+          <div class="card-subtitle">Tổng hợp tình trạng tồn kho và số lượng gợi ý nhập thêm của từng mặt hàng</div>
         </div>
         <button type="button" class="btn btn-outline" id="inv-export-btn">
           <i data-lucide="download" style="width:16px;height:16px"></i>
@@ -157,8 +156,8 @@ export async function renderInventoryPage(container) {
               <th>Mã SKU</th>
               <th>Ngành hàng</th>
               <th class="num">Tồn hiện tại</th>
-              <th class="num">Nhu cầu D̂ / ngày</th>
-              <th class="num">Độ lệch chuẩn σ_D</th>
+              <th class="num">Nhu cầu dự báo / ngày</th>
+              <th class="num">Độ lệch chuẩn</th>
               <th class="num">Safety Stock (SS)</th>
               <th class="num">Điểm đặt lại (ROP)</th>
               <th>Trạng thái</th>
@@ -174,10 +173,10 @@ export async function renderInventoryPage(container) {
   refreshIcons(container);
 
   const storeSel = container.querySelector('#inv-store');
+  const prodFilterSel = container.querySelector('#inv-product-filter');
   const leadSel = container.querySelector('#inv-lead');
   const slSel = container.querySelector('#inv-sl');
   const srcSel = container.querySelector('#inv-source');
-  const searchInp = container.querySelector('#inv-search');
 
   const reload = async () => {
     updateState({
@@ -194,14 +193,22 @@ export async function renderInventoryPage(container) {
   slSel.addEventListener('change', reload);
   srcSel.addEventListener('change', reload);
 
-  searchInp.addEventListener('input', () => {
-    searchKeyword = searchInp.value.trim().toLowerCase();
+  prodFilterSel.addEventListener('change', async () => {
+    productFilter = prodFilterSel.value;
     renderTableRows(container);
+    if (productFilter !== 'ALL') {
+      updateState({ product_id: productFilter });
+      await loadSkuHistoryChart(container, productFilter);
+    }
   });
 
   container.querySelectorAll('[data-filter]').forEach((card) => {
     card.addEventListener('click', () => {
       statusFilter = card.dataset.filter;
+      if (statusFilter === 'ALL') {
+        productFilter = 'ALL';
+        prodFilterSel.value = 'ALL';
+      }
       renderTableRows(container);
     });
   });
@@ -248,10 +255,11 @@ async function loadInventoryStatus(container) {
     container.querySelector('#inv-count-warning').textContent = fmtInt(data.summary.warning);
     container.querySelector('#inv-count-safe').textContent = fmtInt(data.summary.safe);
 
-    badge.textContent = `Store ${data.store_id} • L=${data.lead_time_days} ngày • SL=${data.service_level} (Z=${data.z_score}) • Nguồn D̂: ${data.demand_model}`;
+    badge.textContent = `Cửa hàng ${data.store_id} • Giao hàng ${data.lead_time_days} ngày • Dịch vụ ${data.service_level} • Nguồn: ${data.demand_model}`;
 
     renderTableRows(container);
-    await loadSkuHistoryChart(container, appState.product_id);
+    const targetSku = productFilter !== 'ALL' ? productFilter : appState.product_id;
+    await loadSkuHistoryChart(container, targetSku);
   } catch (err) {
     renderError(container.querySelector('#inv-table-body'), err, () => loadInventoryStatus(container));
   }
@@ -261,10 +269,7 @@ function renderTableRows(container) {
   const tbody = container.querySelector('#inv-table-body');
   const filtered = currentItems.filter((it) => {
     if (statusFilter !== 'ALL' && it.status_code !== statusFilter) return false;
-    if (searchKeyword) {
-      const hay = `${it.product_id} ${it.category}`.toLowerCase();
-      if (!hay.includes(searchKeyword)) return false;
-    }
+    if (productFilter !== 'ALL' && it.product_id !== productFilter) return false;
     return true;
   });
 

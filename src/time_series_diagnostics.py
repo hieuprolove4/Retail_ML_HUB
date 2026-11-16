@@ -66,9 +66,7 @@ def plot_rolling_statistics(ts, window=7):
     plt.tight_layout()
 
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_4_hinh_4_3_trung_binh_do_lech_truot.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_4_3_rolling_mean_std.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -90,13 +88,26 @@ def run_stationarity_tests(ts):
     for key, val in adf_res[4].items():
         print(f"        {key}: {val:.4f}")
     
+    # 2. KPSS Test (Null hypothesis: Chuỗi có tính dừng quanh mức trung bình)
+    kpss_res = kpss(ts.dropna(), regression='c', nlags="auto")
+
+    # Kết luận & Lưu kết quả ra CSV phục vụ Chương 4
+    adf_conclusion = (
+        "Chuỗi có tính dừng (Stationary, p-value < 0.05 -> bác bỏ H0)"
+        if adf_res[1] < 0.05
+        else "Chuỗi có tính phi dừng (Non-stationary, p-value >= 0.05 -> chưa bác bỏ H0)"
+    )
+    kpss_conclusion = (
+        "Chuỗi là dừng (Stationary, p-value >= 0.05 -> không bác bỏ H0)"
+        if kpss_res[1] >= 0.05
+        else "Chuỗi là phi dừng (Non-stationary, p-value < 0.05 -> bác bỏ H0)"
+    )
+
     if adf_res[1] < 0.05:
         print("    => Kết luận ADF: p-value < 0.05, bác bỏ giả thuyết H0. Chuỗi có tính dừng (Stationary)!")
     else:
         print("    => Kết luận ADF: p-value >= 0.05, chưa đủ cơ sở bác bỏ H0. Chuỗi có tính phi dừng (Non-stationary)!")
 
-    # 2. KPSS Test (Null hypothesis: Chuỗi có tính dừng quanh mức trung bình)
-    kpss_res = kpss(ts.dropna(), regression='c', nlags="auto")
     print(f"\n[2] Kwiatkowski-Phillips-Schmidt-Shin (KPSS) Test:")
     print(f"    - KPSS Statistic: {kpss_res[0]:.4f}")
     print(f"    - p-value       : {kpss_res[1]:.4f}")
@@ -109,7 +120,40 @@ def run_stationarity_tests(ts):
         print("    => Kết luận KPSS: p-value >= 0.05, không thể bác bỏ H0. Chuỗi là dừng (Stationary)!")
     else:
         print("    => Kết luận KPSS: p-value < 0.05, bác bỏ H0. Chuỗi là phi dừng (Non-stationary)!")
+
+    rows = [
+        {
+            "Test": "ADF (Augmented Dickey-Fuller)",
+            "Statistic": round(float(adf_res[0]), 4),
+            "p_value": float(adf_res[1]),
+            "Lags_Used": int(adf_res[2]),
+            "Observations": int(adf_res[3]),
+            "Critical_1pct": round(float(adf_res[4]["1%"]), 4),
+            "Critical_5pct": round(float(adf_res[4]["5%"]), 4),
+            "Critical_10pct": round(float(adf_res[4]["10%"]), 4),
+            "Conclusion": adf_conclusion,
+        },
+        {
+            "Test": "KPSS (Kwiatkowski-Phillips-Schmidt-Shin)",
+            "Statistic": round(float(kpss_res[0]), 4),
+            "p_value": round(float(kpss_res[1]), 4),
+            "Lags_Used": int(kpss_res[2]),
+            "Observations": int(len(ts.dropna())),
+            "Critical_1pct": round(float(kpss_res[3]["1%"]), 4),
+            "Critical_5pct": round(float(kpss_res[3]["5%"]), 4),
+            "Critical_10pct": round(float(kpss_res[3]["10%"]), 4),
+            "Conclusion": kpss_conclusion,
+        },
+    ]
+
+    reports_dir = "reports"
+    os.makedirs(reports_dir, exist_ok=True)
+    csv_path = os.path.join(reports_dir, "stationarity_tests_s001_p0001.csv")
+    pd.DataFrame(rows).to_csv(csv_path, index=False, encoding="utf-8-sig")
+    print(f"--> Đã xuất bảng kết quả kiểm định ra: {csv_path}")
     print("=" * 60 + "\n")
+
+    return {"adf": rows[0], "kpss": rows[1], "csv_path": csv_path}
 
 
 def plot_acf_pacf(ts):
@@ -131,9 +175,7 @@ def plot_acf_pacf(ts):
     plt.tight_layout()
 
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_4_hinh_4_2_tu_tuong_quan_acf_pacf.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_4_2_autocorrelation_acf_pacf.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -161,9 +203,7 @@ def plot_seasonal_decomposition(ts):
 
     plt.tight_layout()
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_4_hinh_4_1_phan_ra_chuoi_thoi_gian.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_4_1_seasonal_decomposition.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 

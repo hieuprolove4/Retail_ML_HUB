@@ -1,6 +1,5 @@
 /**
  * Page 5: Ma trận Phân loại Tồn kho Chiến lược ABC - XYZ (abcxyz.js)
- * Phân tích đúng 20 sản phẩm của cửa hàng theo tỷ trọng doanh thu (ABC) và hệ số biến thiên CV (XYZ).
  */
 
 import { apiGet, appState, updateState, getOptions } from '../api.js';
@@ -19,10 +18,10 @@ export async function renderAbcXyzPage(container) {
         <div>
           <div class="card-title">
             <i data-lucide="grid-3x3" style="width:18px;height:18px"></i>
-            <span>Ma trận Phân loại Tồn kho Chiến lược ABC – XYZ (Hình 4.12)</span>
+            <span>Ma trận Phân loại Tồn kho Chiến lược ABC – XYZ</span>
           </div>
           <div class="card-subtitle">
-            ABC theo doanh thu tích lũy (A: ≤80%, B: 80–95%, C: &gt;95%) • XYZ theo hệ số biến thiên nhu cầu CV = σ/μ (X: ≤0.40, Y: 0.40–0.70, Z: &gt;0.70)
+            Phân nhóm sản phẩm theo tỷ trọng doanh thu đóng góp (A, B, C) và mức độ biến động nhu cầu tiêu thụ (X, Y, Z)
           </div>
         </div>
 
@@ -66,7 +65,7 @@ export async function renderAbcXyzPage(container) {
             <i data-lucide="table" style="width:18px;height:18px"></i>
             <span id="abc-table-title">Danh sách phân loại 20 mã sản phẩm</span>
           </div>
-          <div class="card-subtitle">Đã khắc phục lỗi trùng lặp ngành hàng: tổng hợp đúng 20 Product ID duy nhất</div>
+          <div class="card-subtitle">Chi tiết doanh thu, tỷ trọng đóng góp và phân nhóm chiến lược của từng sản phẩm</div>
         </div>
         <button type="button" class="btn btn-outline" id="abc-export-btn">
           <i data-lucide="download" style="width:16px;height:16px"></i>
@@ -147,7 +146,7 @@ function renderMatrixAndTable(container) {
   const grid = container.querySelector('#abc-matrix-grid');
   const rows = ['A', 'B', 'C'];
   const cols = ['X', 'Y', 'Z'];
-  const rowDesc = { A: 'A (80% DT)', B: 'B (15% DT)', C: 'C (5% DT)' };
+  const rowDesc = { A: 'Nhóm A (80% DT)', B: 'Nhóm B (15% DT)', C: 'Nhóm C (5% DT)' };
 
   const cellTone = (r, c) => {
     if (r === 'A' && c === 'Z') return 'var(--color-critical-bg)';
@@ -158,9 +157,9 @@ function renderMatrixAndTable(container) {
 
   let html = `
     <div class="matrix-header">ABC \\ XYZ</div>
-    <div class="matrix-header">X (Ổn định)<br/><small>CV ≤ 0.40</small></div>
-    <div class="matrix-header">Y (Dao động)<br/><small>0.40 &lt; CV ≤ 0.70</small></div>
-    <div class="matrix-header">Z (Biến động)<br/><small>CV &gt; 0.70</small></div>
+    <div class="matrix-header">X (Ổn định)</div>
+    <div class="matrix-header">Y (Dao động)</div>
+    <div class="matrix-header">Z (Biến động)</div>
   `;
 
   for (const r of rows) {

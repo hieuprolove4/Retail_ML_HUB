@@ -68,9 +68,7 @@ def plot_figure_1_daily_sales_trend(df):
     plt.tight_layout()
     
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_1_hinh_1_1_xu_huong_ban_hang_ngay.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_1_1_daily_sales_trend.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -100,9 +98,7 @@ def plot_figure_2_sales_by_category(df):
 
     plt.tight_layout()
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_1_hinh_1_2_san_luong_theo_nganh_hang.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_1_2_sales_by_category.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -122,9 +118,7 @@ def plot_figure_3_sales_by_store_region(df):
     plt.tight_layout()
 
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_1_hinh_1_3_san_luong_cua_hang_khu_vuc.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_1_3_sales_by_store_region.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -148,9 +142,7 @@ def plot_figure_4_weather_impact(df):
     plt.tight_layout()
 
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_1_hinh_1_4_tac_dong_thoi_tiet.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_1_4_weather_impact.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -175,9 +167,7 @@ def plot_figure_5_seasonality_promotion(df):
     plt.tight_layout()
 
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_1_hinh_1_5_mua_vu_va_khuyen_mai.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_1_5_seasonality_promotion.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -199,9 +189,7 @@ def plot_figure_6_price_elasticity(df):
     plt.tight_layout()
 
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_1_hinh_1_6_do_co_gian_gia.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_1_6_price_elasticity.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
@@ -233,9 +221,7 @@ def plot_figure_7_correlation_heatmap(df):
     plt.tight_layout()
 
     save_path_vn = os.path.join(OUTPUT_DIR, 'chuong_1_hinh_1_7_ma_tran_tuong_quan.png')
-    save_path_orig = os.path.join(OUTPUT_DIR, 'figure_1_7_correlation_heatmap.png')
     plt.savefig(save_path_vn, bbox_inches='tight')
-    plt.savefig(save_path_orig, bbox_inches='tight')
     plt.close()
     print(f"    Đã lưu: {save_path_vn}")
 
