@@ -457,6 +457,7 @@ def get_abc_xyz_matrix(store_id: str = "S001"):
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 if os.path.exists(FRONTEND_DIR):
     app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+    app.mount("/frontend", StaticFiles(directory=FRONTEND_DIR), name="frontend")
 
 
 @app.get("/")
